@@ -28,10 +28,21 @@ export const Field = styled.div`
 
   width: 110px;
   min-width: 110px;
-  padding: 5px;
+  padding: 10px 5px;
   font-weight: 600;
+  border-radius: 5px;
 
   color: var(--pink-color);
+
+  > svg {
+    display: none;
+    transform: scaleY(1);
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--body-color);
+  }
 `;
 
 export const TBody = styled.div`
