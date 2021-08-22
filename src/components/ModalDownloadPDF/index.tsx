@@ -1,33 +1,15 @@
 import React, { forwardRef, useState, useEffect } from "react";
 
 import PDFDownload from "../PDFDownload";
+import IProduct from "../../interfaces/IProduct";
+import ICustomer from "../../interfaces/ICustomer";
 import { Container, Modal, Header, Button } from "./styles";
-
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  qtd: string;
-  value: string;
-}
-
-interface Customer {
-  name?: string;
-  phoneNumber?: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  neighbor?: string;
-  cep?: string;
-  email?: string;
-  cnpj?: string;
-}
 
 interface Props {
   showModal: boolean;
   hadlerCloseModal: () => void;
-  customer: Customer;
-  products: Product[];
+  customer: ICustomer;
+  products: IProduct[];
 }
 
 const ModalDownloadPDF: React.ForwardRefRenderFunction<HTMLDivElement, Props> =

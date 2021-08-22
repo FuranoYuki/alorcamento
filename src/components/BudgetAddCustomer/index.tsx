@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 
+import ICustomer from "../../interfaces/ICustomer";
 import api from "../../service/http";
 import {
   Container,
@@ -19,49 +20,42 @@ import {
   CodeInput,
 } from "./styles";
 
-interface Customer {
-  name?: string;
-  phoneNumber?: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  neighbor?: string;
-  cep?: string;
-  email?: string;
-  cnpj?: string;
-  cpf?: string;
-}
-
 interface Props {
-  handlerCustomer: (cust: Customer) => void;
+  handlerCustomer: (cust: ICustomer) => void;
 }
 
 const BudgetAddCustomer: React.FC<Props> = (Props) => {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const phoneNumberRef = useRef<HTMLInputElement>(null);
-  const addressRef = useRef<HTMLInputElement>(null);
-  const cityRef = useRef<HTMLInputElement>(null);
-  const stateRef = useRef<HTMLSelectElement>(null);
-  const neighborRef = useRef<HTMLInputElement>(null);
+  const cpfRef = useRef<HTMLInputElement>(null);
   const cepRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const cityRef = useRef<HTMLInputElement>(null);
   const cnpjRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const stateRef = useRef<HTMLSelectElement>(null);
+  const addressRef = useRef<HTMLInputElement>(null);
+  const neighborRef = useRef<HTMLInputElement>(null);
+  const phoneNumberRef = useRef<HTMLInputElement>(null);
+  const sendingAddressRef = useRef<HTMLInputElement>(null);
+
   const cpfAutoRef = useRef<HTMLInputElement>(null);
   const cnpjAutoRef = useRef<HTMLInputElement>(null);
+
   const warningErrorRef = useRef<HTMLDivElement>(null);
   const warningExistRef = useRef<HTMLDivElement>(null);
 
   const handlerInputBlur = () => {
     const customer = {
-      name: nameRef.current?.value,
-      phoneNumber: phoneNumberRef.current?.value,
-      address: addressRef.current?.value,
-      city: cityRef.current?.value,
-      state: stateRef.current?.value,
-      neighbor: neighborRef.current?.value,
-      cep: cepRef.current?.value,
-      email: emailRef.current?.value,
-      cnpj: cnpjRef.current?.value,
+      name: nameRef.current?.value.trim(),
+      phoneNumber: phoneNumberRef.current?.value.trim(),
+      address: addressRef.current?.value.trim(),
+      city: cityRef.current?.value.trim(),
+      state: stateRef.current?.value.trim(),
+      neighbor: neighborRef.current?.value.trim(),
+      cep: cepRef.current?.value.trim(),
+      email: emailRef.current?.value.trim(),
+      cnpj: cnpjRef.current?.value.trim(),
+      cpf: cpfRef.current?.value.trim(),
+      sendingAddress: sendingAddressRef.current?.value.trim(),
     };
 
     Props.handlerCustomer(customer);
@@ -245,8 +239,18 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
             id="cpf"
             name="cpf"
             type="text"
-            // ref={cnpjlRef}
-            // onBlur={handlerInputBlur}
+            ref={cpfRef}
+            onBlur={handlerInputBlur}
+          />
+        </Field>
+        <Field>
+          <Label htmlFor="sendingAddress">Endereço de entrega</Label>
+          <Input
+            id="sendingAddress"
+            name="sendingAddress"
+            type="text"
+            ref={sendingAddressRef}
+            onBlur={handlerInputBlur}
           />
         </Field>
       </Fields>

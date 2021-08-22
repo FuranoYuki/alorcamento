@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
+import IProduct from "../../interfaces/IProduct";
 import BudgetAddProductField from "../BudgetAddProductField";
 import {
   Container,
@@ -17,16 +18,8 @@ import {
   Button,
 } from "./styles";
 
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  qtd: string;
-  value: string;
-}
-
 interface Props {
-  handlerProcuts: (prod: Product[]) => void;
+  handlerProcuts: (prod: IProduct[]) => void;
 }
 
 const BudgetAddProduct: React.FC<Props> = (Props) => {
@@ -35,14 +28,15 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const imageRef = useRef<HTMLInputElement>(null);
   const valueRef = useRef<HTMLInputElement>(null);
+  const areaRef = useRef<HTMLInputElement>(null);
   // const totalRef = useRef<HTMLInputElement>(null);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
 
   const handlerRemoveField = (e: React.MouseEvent) => {
     const remove = e.currentTarget.parentNode as HTMLDivElement;
     const field = remove.parentNode as HTMLTableRowElement;
     const updatedProducts = products.filter(
-      (product) => product.id != field.id
+      (product) => product._id != field.id
     );
 
     setProducts([...updatedProducts]);
@@ -53,16 +47,21 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
     const name = nameRef.current as HTMLInputElement;
     const image = imageRef.current as HTMLInputElement;
     const price = valueRef.current as HTMLInputElement;
+    const area = areaRef.current as HTMLInputElement;
 
-    if (qtd.value && name.value && image.value && price.value) {
+    if (qtd.value && name.value && image.value && price.value && area.value) {
       id.current = String(Number(id.current) + 1);
 
-      const newProduct: Product = {
-        qtd: qtd.value,
-        name: name.value,
+      const newProduct: IProduct = {
+        qtd: qtd.value.trim(),
+        name: name.value.trim(),
         image: URL.createObjectURL(image.files?.item(0)),
-        value: price.value,
-        id: id.current,
+        value: price.value.replace(",", ".").trim(),
+        _id: id.current.trim(),
+        area: area.value.trim(),
+        total: String(
+          (Number(qtd.value.trim()) * Number(price.value.trim())).toFixed(2)
+        ),
       };
 
       setProducts([...products, newProduct]);
@@ -71,6 +70,7 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
       name.value = "";
       image.value = "";
       price.value = "";
+      area.value = "";
     } else {
       console.log("please set all boxies");
     }
@@ -89,17 +89,19 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
             <THead>
               <TableTh>Image</TableTh>
               <TableTh>Nome</TableTh>
+              <TableTh>Area (m²)</TableTh>
               <TableTh>QTD</TableTh>
-              <TableTh>Preço Unit</TableTh>
+              <TableTh>Preço Unit.</TableTh>
               <TableTh>Total</TableTh>
             </THead>
             <TBody>
-              {products.map((product: Product) => (
+              {products.map((product: IProduct) => (
                 <BudgetAddProductField
-                  id={product.id}
-                  key={product.id}
+                  id={product._id}
+                  key={product._id}
                   qtd={product.qtd}
                   name={product.name}
+                  area={product.area}
                   image={product.image}
                   value={product.value}
                   handlerRemoveField={handlerRemoveField}
@@ -117,6 +119,10 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
             <Field>
               <Label htmlFor="name">Nome</Label>
               <Input type="text" id="name" name="name" ref={nameRef} />
+            </Field>
+            <Field>
+              <Label htmlFor="area">Area (m²)</Label>
+              <Input type="text" id="area" name="area" ref={areaRef} />
             </Field>
             <Field>
               <Label htmlFor="qtd">QTD</Label>

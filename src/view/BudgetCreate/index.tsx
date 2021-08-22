@@ -1,11 +1,16 @@
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { PDFViewer, pdf } from "@react-pdf/renderer";
 import { faCalculator } from "@fortawesome/free-solid-svg-icons";
 
+import IProduct from "../../interfaces/IProduct";
+import ICustomer from "../../interfaces/ICustomer";
+import api from "../../service/http";
 import HeaderTop from "../../components/HeaderTop";
 import BudgetAddCustomer from "../../components/BudgetAddCustomer";
 import BudgetAddProduct from "../../components/BudgetAddProduct";
-import PDFTest from "../PDFTest";
+import PDFDownload from "../../components/PDFDownload";
+import PDFGuia from "../../components/PDFGuia";
 import NavBar from "../../components/NavBar";
 import ModalDownloadPDF from "../../components/ModalDownloadPDF";
 import {
@@ -23,43 +28,60 @@ import {
   Content,
 } from "./styles";
 
-interface Product {
-  id: string;
-  name: string;
-  image: string;
-  qtd: string;
-  value: string;
-}
-
-interface Customer {
-  name?: string;
-  phoneNumber?: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  neighbor?: string;
-  cep?: string;
-  email?: string;
-  cnpj?: string;
-}
-
 const BudgetCreate: React.FC = () => {
+  const history = useHistory();
   const modalRef = useRef<HTMLDivElement>(null);
   const pdfBoxRef = useRef<HTMLDivElement>(null);
   const [showModal, setshowModal] = useState(false);
-  const [customer, setcustomer] = useState<Customer>({});
-  const [products, setproducts] = useState<Product[]>([]);
+  const [customer, setcustomer] = useState<ICustomer>({});
+  const [products, setproducts] = useState<IProduct[]>([]);
 
-  const handlerProcuts = (prod: Product[]) => {
+  const handlerProcuts = (prod: IProduct[]) => {
     setproducts(prod);
   };
 
-  const handlerCustomer = (cust: Customer) => {
+  const handlerCustomer = (cust: ICustomer) => {
     setcustomer(cust);
   };
 
-  const handlerButtonCreateClick = () => {
-    console.log("criar orcamento");
+  const handlerButtonCreateClick = async () => {
+    const blobBudget = await pdf(
+      <PDFDownload products={products} customer={customer} />
+    ).toBlob();
+
+    const blobGuia = await pdf(
+      <PDFGuia products={products} customer={customer} />
+    ).toBlob();
+
+    const budgetPdfFile = new File([blobBudget], "alorcamento", {
+      lastModified: Date.now(),
+      type: blobBudget.type,
+    });
+
+    const guiaPdfFile = new File([blobGuia], "alorcamento", {
+      lastModified: Date.now(),
+      type: blobGuia.type,
+    });
+
+    const budget = new FormData();
+    budget.append("budgetFile", budgetPdfFile);
+    budget.append("guiaFile", guiaPdfFile);
+    budget.append("customer", JSON.stringify(customer));
+    budget.append("products", JSON.stringify(products));
+    api({
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: budget,
+      method: "POST",
+      url: "/alorcamentos/budget/create",
+    })
+      .then(() => {
+        history.push("/budget");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handlerButtonPreviewClick = () => {
@@ -104,7 +126,9 @@ const BudgetCreate: React.FC = () => {
         <BudgetAddCustomer handlerCustomer={handlerCustomer} />
         <BudgetAddProduct handlerProcuts={handlerProcuts} />
         <PDFPreView ref={pdfBoxRef}>
-          <PDFTest products={products} customer={customer} />
+          <PDFViewer>
+            <PDFGuia products={products} customer={customer} />
+          </PDFViewer>
         </PDFPreView>
         <Buttons>
           <ButtonCreate onClick={handlerButtonCreateClick} type="button">
@@ -117,13 +141,13 @@ const BudgetCreate: React.FC = () => {
             Preview
           </ButtonPreview>
         </Buttons>
-        <ModalDownloadPDF
+        {/* <ModalDownloadPDF
           ref={modalRef}
           showModal={showModal}
           hadlerCloseModal={hadlerCloseModal}
           customer={customer}
           products={products}
-        />
+        /> */}
       </Content>
     </Container>
   );

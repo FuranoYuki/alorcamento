@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   qtdHeader: {
     textAlign: "center",
 
-    width: 65,
+    width: 95,
     fontSize: 10,
 
     color: "white",
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
   qtdRow: {
     textAlign: "center",
 
-    width: 65,
+    width: 95,
     fontSize: 11,
 
     color: "black",
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   totalInfoValue: {
     textAlign: "center",
 
-    width: 90,
+    width: 75,
     padding: 5,
     fontSize: 11,
 
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PDFDownload: React.FC<Props> = (Props) => {
+const PDFGuia: React.FC<Props> = (Props) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -333,7 +333,7 @@ const PDFDownload: React.FC<Props> = (Props) => {
             </View>
           </View>
           <View style={styles.title}>
-            <Text>Orçamento</Text>
+            <Text>Guia de Pedido</Text>
           </View>
           <View style={styles.customerInfo}>
             <View style={styles.customerInfoRow}>
@@ -362,8 +362,12 @@ const PDFDownload: React.FC<Props> = (Props) => {
             </View>
             <View style={styles.customerInfoRow}>
               <View style={styles.infoLongFieldName}>
-                <Text style={styles.label}>Endereco:</Text>
-                <Text style={styles.input}>{Props.customer.address}</Text>
+                <Text style={styles.label}>
+                  Endereco / Endereço de entrega:
+                </Text>
+                <Text style={styles.input}>
+                  {Props.customer.address} / {Props.customer.sendingAddress}
+                </Text>
               </View>
               <View style={styles.infoLongFieldVendedor}>
                 <Text style={styles.label}>Bairro:</Text>
@@ -394,16 +398,10 @@ const PDFDownload: React.FC<Props> = (Props) => {
                 <Text>Nome</Text>
               </View>
               <View style={styles.qtdHeader}>
-                <Text>Area (m²)</Text>
-              </View>
-              <View style={styles.qtdHeader}>
                 <Text>QTD</Text>
               </View>
-              <View style={styles.valueHeader}>
-                <Text>PRECO UNIT.</Text>
-              </View>
-              <View style={styles.totalHeader}>
-                <Text>TOTAL</Text>
+              <View style={styles.qtdHeader}>
+                <Text>Area (m²)</Text>
               </View>
             </View>
             {Props.products.map((product) => (
@@ -419,36 +417,13 @@ const PDFDownload: React.FC<Props> = (Props) => {
                   <Text>{product.name}</Text>
                 </View>
                 <View style={styles.qtdRow}>
-                  <Text>{product.area}m²</Text>
-                </View>
-                <View style={styles.qtdRow}>
                   <Text>{product.qtd}</Text>
                 </View>
-                <View style={styles.valueRow}>
-                  <Text>{product.value}</Text>
-                </View>
-                <View style={styles.totalRow}>
-                  <Text>
-                    {Number(
-                      (Number(product.qtd) * Number(product.value)).toFixed(3)
-                    )}
-                  </Text>
+                <View style={styles.qtdRow}>
+                  <Text>{product.area}m²</Text>
                 </View>
               </View>
             ))}
-            <View style={styles.budgetTotalInfo}>
-              <View style={styles.totalInfoTitle}>
-                <Text>Total</Text>
-              </View>
-              <View style={styles.totalInfoValue}>
-                <Text>
-                  R$
-                  {Props.products
-                    .reduce((a, b) => Number(a) + Number(b.total), 0)
-                    .toFixed(1)}
-                </Text>
-              </View>
-            </View>
           </View>
         </View>
       </Page>
@@ -456,4 +431,4 @@ const PDFDownload: React.FC<Props> = (Props) => {
   );
 };
 
-export default PDFDownload;
+export default PDFGuia;

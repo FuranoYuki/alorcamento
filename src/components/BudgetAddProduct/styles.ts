@@ -40,6 +40,9 @@ export const Table = styled.div`
 
 export const THead = styled.div`
   display: flex;
+
+  padding: 0 5px;
+
   color: white;
 `;
 

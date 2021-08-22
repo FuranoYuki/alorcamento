@@ -13,6 +13,7 @@ import {
 interface Props {
   id: string;
   name: string;
+  area: string;
   image: string;
   qtd: string;
   value: string;
@@ -35,6 +36,7 @@ const BudgetAddProductField: React.FC<Props> = (Props) => {
         </ImageBox>
       </TableTd>
       <TableTd>{Props.name}</TableTd>
+      <TableTd>{Props.area}m²</TableTd>
       <TableTd>{Props.qtd}</TableTd>
       <TableTd>R$ {Props.value}</TableTd>
       <TableTd>R$ {total}</TableTd>

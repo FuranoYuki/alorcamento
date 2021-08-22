@@ -3,7 +3,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAddressCard, faCalculator } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAddressCard,
+  faCalculator,
+  faPaste,
+} from "@fortawesome/free-solid-svg-icons";
 
 import { Container, Header, Image, List, Item } from "./styles";
 
@@ -58,6 +62,12 @@ const NavBar: React.FC = () => {
           <Link to="/budget" ref={field2Ref}>
             <FontAwesomeIcon icon={faCalculator} />
             <span ref={budgetRef}>Orcamento</span>
+          </Link>
+        </Item>
+        <Item>
+          <Link to="/product" ref={field2Ref}>
+            <FontAwesomeIcon icon={faPaste} />
+            <span ref={budgetRef}>Produtos</span>
           </Link>
         </Item>
       </List>

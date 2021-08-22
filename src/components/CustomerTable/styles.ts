@@ -13,6 +13,7 @@ export const Table = styled.div`
   gap: 20px 0;
 
   width: 1320px;
+  margin: 0 auto;
 `;
 
 export const THeader = styled.div`

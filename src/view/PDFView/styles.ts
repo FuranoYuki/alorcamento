@@ -2,16 +2,10 @@ import styled from "styled-components";
 import { StyleSheet } from "@react-pdf/renderer";
 
 export const Container = styled.div`
-  width: 100%;
-  height: 400px;
-
-  background-color: var(--white-color);
-
+  overflow: hidden;
   > iframe {
-    width: 100%;
+    width: 100vw;
     height: 100%;
-    border-radius: 5px;
-    border: 3px solid var(--pink-color);
   }
 `;
 

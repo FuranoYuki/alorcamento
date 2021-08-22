@@ -18,8 +18,7 @@ export const Content = styled.div`
   display: flex;
   flex-grow: 1;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
 `;
 
 export const TopSection = styled.div`
@@ -49,24 +48,14 @@ export const Top = styled.div`
   display: flex;
   align-items: center;
   gap: 0 10px;
-  font-size: 22px;
-
-  @media (max-width: 600px) {
-    font-size: 16px;
-  }
 `;
 
 export const Bottom = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px 5px;
+  gap: 0 5px;
 
   font-size: 12px;
   font-weight: 600;
-
-  @media (max-width: 600px) {
-    font-size: 11px;
-  }
 
   > a {
     color: var(--light-blue);
@@ -74,90 +63,48 @@ export const Bottom = styled.div`
 `;
 
 export const ClientIcon = styled(FontAwesomeIcon)`
-  width: 60px !important;
-  height: 60px;
-
-  @media (max-width: 600px) {
-    width: 40px !important;
-    height: 40px;
-  }
+  width: 50px !important;
+  height: 50px;
 `;
 
 export const Buttons = styled.div`
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 10px 10px;
-
-  padding-bottom: 20px;
+  gap: 0 10px;
 
   color: var(--white-color);
-  background-color: var(--white-color);
 `;
 
 const ButtonCss = css`
-  width: 180px;
-  height: 60px;
+  padding: 10px 20px;
+  font-size: 16px;
   font-weight: 600;
-  font-size: 14px;
-  text-decoration: none;
-  border-radius: 8px;
+  border-radius: 5px;
   border: 1px solid var(--border-bottom);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 
   color: white;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
 
   &:hover {
     cursor: pointer;
   }
 `;
 
-export const ButtonCreate = styled.button`
-  ${ButtonCss};
-  background-color: var(--body-color);
-
-  &:hover {
-    cursor: pointer;
-    background-color: var(--dark-blue);
-  }
-`;
-
-export const ButtonPreview = styled.button`
-  ${ButtonCss};
+export const Cadastrar = styled.button`
+  ${ButtonCss}
   background-color: var(--green-color);
 
   &:hover {
-    cursor: pointer;
     background-color: var(--green-dark-color);
   }
-`;
 
-export const ButtonDownload = styled.button`
-  ${ButtonCss};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--pink-color);
-
-  &:hover {
-    cursor: pointer;
-    background-color: var(--pink-dark-color);
+  > a {
+    color: inherit;
+    text-decoration: none;
   }
 `;
 
-export const PDFPreView = styled.div`
-  display: none;
-
-  padding: 20px;
-
-  background-color: var(--white-color);
-
-  > iframe {
-    width: 800px;
-    height: 500px;
-    margin: 0 auto;
-    border-radius: 8px;
-    border: 3px solid var(--pink-color);
-  }
+export const Imprimir = styled.button`
+  ${ButtonCss}
+  background-color: var(--light-blue);
 `;

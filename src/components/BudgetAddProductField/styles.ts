@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const TableTr = styled.tr`
+export const TableTr = styled.div`
   display: flex;
   align-items: center;
 
