@@ -1,8 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { PDFViewer, pdf } from "@react-pdf/renderer";
 import { faCalculator } from "@fortawesome/free-solid-svg-icons";
+import { toast, ToastContainer } from "react-toastify";
 
+import { successStyle, errorStyle } from "../../components/Notifications";
 import IProduct from "../../interfaces/IProduct";
 import ICustomer from "../../interfaces/ICustomer";
 import api from "../../service/http";
@@ -12,7 +14,6 @@ import BudgetAddProduct from "../../components/BudgetAddProduct";
 import PDFDownload from "../../components/PDFDownload";
 import PDFGuia from "../../components/PDFGuia";
 import NavBar from "../../components/NavBar";
-import ModalDownloadPDF from "../../components/ModalDownloadPDF";
 import {
   Container,
   TopSection,
@@ -22,7 +23,6 @@ import {
   ClientIcon,
   Buttons,
   ButtonCreate,
-  ButtonDownload,
   ButtonPreview,
   PDFPreView,
   Content,
@@ -30,9 +30,7 @@ import {
 
 const BudgetCreate: React.FC = () => {
   const history = useHistory();
-  const modalRef = useRef<HTMLDivElement>(null);
   const pdfBoxRef = useRef<HTMLDivElement>(null);
-  const [showModal, setshowModal] = useState(false);
   const [customer, setcustomer] = useState<ICustomer>({});
   const [products, setproducts] = useState<IProduct[]>([]);
 
@@ -77,29 +75,19 @@ const BudgetCreate: React.FC = () => {
       url: "/alorcamentos/budget/create",
     })
       .then(() => {
-        history.push("/budget");
+        toast.success("Orcamento cadastrado", successStyle);
+        setTimeout(() => {
+          history.push("/budget");
+        }, 2500);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        toast.error("Falha ao cadastrar orcamento", errorStyle);
       });
   };
 
   const handlerButtonPreviewClick = () => {
     const pdf = pdfBoxRef.current as HTMLDivElement;
-    pdf.style.display = "flex";
-  };
-
-  const handlerButtonDownloadClick = () => {
-    const modal = modalRef.current as HTMLDivElement;
-    setshowModal(true);
-
-    modal.style.display = "flex";
-  };
-
-  const hadlerCloseModal = () => {
-    const modal = modalRef.current as HTMLDivElement;
-    setshowModal(false);
-    modal.style.display = "none";
+    pdf.style.display = pdf.style.display == "flex" ? "none" : "flex";
   };
 
   return (
@@ -125,30 +113,31 @@ const BudgetCreate: React.FC = () => {
         </TopSection>
         <BudgetAddCustomer handlerCustomer={handlerCustomer} />
         <BudgetAddProduct handlerProcuts={handlerProcuts} />
-        <PDFPreView ref={pdfBoxRef}>
-          <PDFViewer>
-            <PDFGuia products={products} customer={customer} />
-          </PDFViewer>
-        </PDFPreView>
         <Buttons>
           <ButtonCreate onClick={handlerButtonCreateClick} type="button">
             Criar Orçamento
           </ButtonCreate>
-          <ButtonDownload onClick={handlerButtonDownloadClick}>
-            Download
-          </ButtonDownload>
           <ButtonPreview onClick={handlerButtonPreviewClick} type="button">
             Preview
           </ButtonPreview>
         </Buttons>
-        {/* <ModalDownloadPDF
-          ref={modalRef}
-          showModal={showModal}
-          hadlerCloseModal={hadlerCloseModal}
-          customer={customer}
-          products={products}
-        /> */}
+        <PDFPreView ref={pdfBoxRef}>
+          <PDFViewer>
+            <PDFDownload products={products} customer={customer} />
+          </PDFViewer>
+        </PDFPreView>
       </Content>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Container>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useHistory } from "react-router-dom";
 
-import api from "../../service/http";
+// import api from "../../service/http";
 import {
   Container,
   Form,
@@ -16,21 +16,14 @@ import {
   ButtonBack,
 } from "./styles";
 
-interface ApiError {
-  emailExist?: boolean;
-  cpfExist?: boolean;
-  cnpjExist?: boolean;
-}
-
 const ProductFormCreate: React.FC = () => {
   const nameRef = useRef<HTMLInputElement>(null);
-  const finishRef = useRef<HTMLSelectElement>(null);
   const valueRef = useRef<HTMLInputElement>(null);
+  const finishRef = useRef<HTMLSelectElement>(null);
 
   const nameWarningRef = useRef<HTMLSpanElement>(null);
-  const emailWarningRef = useRef<HTMLSpanElement>(null);
-  const cpfWarningRef = useRef<HTMLSpanElement>(null);
-  const cnpjWarningRef = useRef<HTMLSpanElement>(null);
+  const valueWarningRef = useRef<HTMLSpanElement>(null);
+  const finishWarningRef = useRef<HTMLSpanElement>(null);
 
   const history = useHistory();
 
@@ -38,32 +31,28 @@ const ProductFormCreate: React.FC = () => {
     e.preventDefault();
 
     const name = nameRef.current as HTMLInputElement;
+    const price = valueRef.current as HTMLInputElement;
     const finish = finishRef.current as HTMLSelectElement;
-    const value = valueRef.current as HTMLInputElement;
+
     const nameWarning = nameWarningRef.current as HTMLSpanElement;
-    const emailWarning = emailWarningRef.current as HTMLSpanElement;
-    const cnpjWarning = cnpjWarningRef.current as HTMLSpanElement;
-    const cpfWarning = cpfWarningRef.current as HTMLSpanElement;
+    const valueWarning = valueWarningRef.current as HTMLSpanElement;
+    const finishWarning = finishWarningRef.current as HTMLSpanElement;
 
-    // if (!name.value) {
-    //   nameWarning.style.display = "flex";
-    // }
+    !name.value
+      ? (nameWarning.style.display = "flex")
+      : (nameWarning.style.display = "none");
 
-    // if (!email.value) {
-    //   emailWarning.style.display = "flex";
-    // }
+    !price.value
+      ? (valueWarning.style.display = "flex")
+      : (valueWarning.style.display = "none");
 
-    // if (name.value) {
-    //   nameWarning.style.display = "none";
-    // }
+    !finish.value
+      ? (finishWarning.style.display = "flex")
+      : (finishWarning.style.display = "none");
 
-    // if (email.value) {
-    //   emailWarning.style.display = "none";
-    // }
-
-    // if (name.value != "" && email.value != "") {
-    //   // API
-    // }
+    if (name.value != "" && price.value != "" && finish.value) {
+      console.log("do call");
+    }
   };
 
   const handlerBackClick = () => {
@@ -76,15 +65,15 @@ const ProductFormCreate: React.FC = () => {
         <Inputs>
           <Field>
             <Header>
+              <span ref={nameWarningRef}>campo obrigatório</span>
               <Label htmlFor="name">Nome</Label>
-              <span ref={emailWarningRef}>campo obrigatório</span>
             </Header>
             <Input id="name" name="name" ref={nameRef} />
           </Field>
           <Field>
             <Header>
+              <span ref={finishWarningRef}>Defina um Acabamento</span>
               <Label htmlFor="finish">Acabamento</Label>
-              <span>Error</span>
             </Header>
             <Select id="finish" name="finish" ref={finishRef}>
               <option value=""></option>
@@ -94,10 +83,10 @@ const ProductFormCreate: React.FC = () => {
           </Field>
           <Field>
             <Header>
-              <Label htmlFor="value">Bairro</Label>
-              <span>Error</span>
+              <span ref={valueWarningRef}>Defina um valor</span>
+              <Label htmlFor="value">Valor</Label>
             </Header>
-            <Input id="neighbor" name="neighbor" ref={valueRef} />
+            <Input id="value" name="value" ref={valueRef} />
           </Field>
         </Inputs>
         <Buttons>

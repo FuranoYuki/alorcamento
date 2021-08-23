@@ -1,5 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+
 import api from "../../service/http";
+import { errorStyle } from "../../components/Notifications";
+import { login, isAuthenticated } from "../../service/token";
 import {
   Container,
   Wrapper,
@@ -14,8 +19,10 @@ import {
 } from "./styles";
 
 const Login: React.FC = () => {
-  const user = useRef("");
-  const password = useRef("");
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  const history = useHistory();
 
   const [userError, setUserError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
@@ -23,18 +30,31 @@ const Login: React.FC = () => {
   const handlerFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    user.current !== "" ? setUserError(false) : setUserError(true);
-    password.current !== "" ? setPasswordError(false) : setPasswordError(true);
+    const email = emailRef.current as HTMLInputElement;
+    const password = passwordRef.current as HTMLInputElement;
+
+    email.value !== "" ? setUserError(false) : setUserError(true);
+    password.value !== "" ? setPasswordError(false) : setPasswordError(true);
 
     api
-      .post("/alorcamentos/login", { email: user, password })
-      .then((data) => {
-        console.log(data);
+      .post("/alorcamentos/user/login", {
+        email: email.value,
+        password: password.value,
       })
-      .catch((error) => {
-        console.log(error);
+      .then((res) => {
+        login(res.data.token);
+        history.push("/budget");
+      })
+      .catch(() => {
+        toast.error("Credenciais incorretas", errorStyle);
       });
   };
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      history.push("/budget");
+    }
+  }, []);
 
   return (
     <Container>
@@ -46,28 +66,32 @@ const Login: React.FC = () => {
             <Inputs>
               <Field>
                 <Label htmlFor="user">
-                  Usuario ou E-mail
-                  {userError && <span>usuario ou e-mail incorreto</span>}
+                  {userError && (
+                    <span className="warning">preencha o e-mail</span>
+                  )}
+                  <span>E-mail</span>
                 </Label>
                 <Input
-                  id="user"
-                  name="user"
+                  id="email"
+                  name="email"
                   type="text"
-                  placeholder="Usuario ou E-mail"
-                  onChange={(e) => (user.current = e.target.value)}
+                  placeholder="E-mail"
+                  ref={emailRef}
                 />
               </Field>
               <Field>
                 <Label htmlFor="password">
-                  Senha
-                  {passwordError && <span>senha incorreta</span>}
+                  {passwordError && (
+                    <span className="warning">insira uma senha</span>
+                  )}
+                  <span>Senha</span>
                 </Label>
                 <Input
                   id="password"
                   name="password"
                   type="password"
                   placeholder="Senha"
-                  onChange={(e) => (password.current = e.target.value)}
+                  ref={passwordRef}
                 />
               </Field>
             </Inputs>
@@ -76,6 +100,17 @@ const Login: React.FC = () => {
         </Box>
         <span>© Copyright 2021. Alorcamento</span>
       </Wrapper>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Container>
   );
 };

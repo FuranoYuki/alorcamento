@@ -9,6 +9,7 @@ interface ICustomer {
   cep?: string;
   email?: string;
   cnpj?: string;
+  cpf?: string;
   sendingAddress?: string;
 }
 

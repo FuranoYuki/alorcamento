@@ -75,6 +75,10 @@ export const Label = styled.label`
   font-weight: 700;
 
   color: var(--pink-color);
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const Input = styled.input`
@@ -89,6 +93,14 @@ export const Input = styled.input`
 
   &:focus {
     outline: none;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 `;
 

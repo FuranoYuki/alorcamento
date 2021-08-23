@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Container = styled.div`
@@ -33,11 +32,10 @@ export const ButtonIcon = styled(FontAwesomeIcon)`
   color: var(--white-color);
 `;
 
-export const Logout = styled(Link)`
+export const Logout = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0 5px;
 
   color: var(--pink-color);
 
@@ -47,6 +45,7 @@ export const Logout = styled(Link)`
   }
 
   > span {
+    padding: 5px;
     font-size: 14px;
     font-weight: 600;
   }

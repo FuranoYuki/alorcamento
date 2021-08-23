@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 import api from "../../service/http";
+import ICustomer from "../../interfaces/ICustomer";
+import { successStyle, errorStyle } from "../Notifications";
 import {
   Container,
   Form,
@@ -16,37 +19,23 @@ import {
   ButtonBack,
 } from "./styles";
 
-interface Customer {
-  _id: string;
-  name: string;
-  phoneNumber: string;
-  address: string;
-  city: string;
-  state: string;
-  neighbor: string;
-  cep: string;
-  email: string;
-  cnpj: string;
-  cpf: string;
-}
-
 interface Props {
-  customer: Customer;
+  customer: ICustomer;
 }
 
 const CustomerFormUpdate: React.FC<Props> = (Props) => {
   const history = useHistory();
 
-  const [name, setname] = useState("");
-  const [email, setemail] = useState("");
-  const [state, setstate] = useState("");
-  const [city, setcity] = useState("");
-  const [neighbor, setneighbor] = useState("");
-  const [address, setaddress] = useState("");
-  const [cep, setcep] = useState("");
-  const [cpf, setcpf] = useState("");
-  const [cnpj, setcnpj] = useState("");
-  const [phoneNumber, setphoneNumber] = useState("");
+  const [cep, setcep] = useState<string | undefined>("");
+  const [cpf, setcpf] = useState<string | undefined>("");
+  const [cnpj, setcnpj] = useState<string | undefined>("");
+  const [name, setname] = useState<string | undefined>("");
+  const [city, setcity] = useState<string | undefined>("");
+  const [email, setemail] = useState<string | undefined>("");
+  const [state, setstate] = useState<string | undefined>("");
+  const [address, setaddress] = useState<string | undefined>("");
+  const [neighbor, setneighbor] = useState<string | undefined>("");
+  const [phoneNumber, setphoneNumber] = useState<string | undefined>("");
 
   const handlerFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,10 +55,13 @@ const CustomerFormUpdate: React.FC<Props> = (Props) => {
         phoneNumber,
       })
       .then(() => {
-        history.push("/customer");
+        toast.success("Cadastro do cliente atualizado", successStyle);
+        setTimeout(() => {
+          history.push("/customer");
+        }, 2500);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        toast.error("Falha ao atualizar cadastro do cliente", errorStyle);
       });
   };
 
@@ -78,28 +70,28 @@ const CustomerFormUpdate: React.FC<Props> = (Props) => {
 
     switch (input.id) {
       case "state":
-        setstate(input.value);
+        setstate(input.value.trim());
         break;
       case "city":
-        setcity(input.value);
+        setcity(input.value.trim());
         break;
       case "neighbor":
-        setneighbor(input.value);
+        setneighbor(input.value.trim());
         break;
       case "address":
-        setaddress(input.value);
+        setaddress(input.value.trim());
         break;
       case "cep":
-        setcep(input.value);
+        setcep(input.value.trim());
         break;
       case "cpf":
-        setcpf(input.value);
+        setcpf(input.value.trim());
         break;
       case "cnpj":
-        setcnpj(input.value);
+        setcnpj(input.value.trim());
         break;
       case "phoneNumber":
-        setphoneNumber(input.value);
+        setphoneNumber(input.value.trim());
         break;
       default:
         break;
@@ -111,15 +103,15 @@ const CustomerFormUpdate: React.FC<Props> = (Props) => {
   };
 
   useEffect(() => {
-    setname(Props.customer.name);
-    setemail(Props.customer.email);
-    setstate(Props.customer.state);
-    setcity(Props.customer.city);
-    setneighbor(Props.customer.neighbor);
-    setaddress(Props.customer.address);
     setcep(Props.customer.cep);
     setcpf(Props.customer.cpf);
+    setname(Props.customer.name);
+    setcity(Props.customer.city);
     setcnpj(Props.customer.cnpj);
+    setemail(Props.customer.email);
+    setstate(Props.customer.state);
+    setaddress(Props.customer.address);
+    setneighbor(Props.customer.neighbor);
     setphoneNumber(Props.customer.phoneNumber);
   }, [Props.customer]);
 
@@ -180,186 +172,37 @@ const CustomerFormUpdate: React.FC<Props> = (Props) => {
             <Select
               id="state"
               name="state"
-              value={state}
               onChange={handlerChangeInput}
+              defaultValue={Props.customer.state}
             >
               <option value=""></option>
-              <option
-                value="Acre"
-                selected={Props.customer.state === "Acre" ? true : false}
-              >
-                Acre
-              </option>
-              <option
-                value="Alagoas"
-                selected={Props.customer.state === "Alagoas" ? true : false}
-              >
-                Alagoas
-              </option>
-              <option
-                value="Amapá"
-                selected={Props.customer.state === "Amapá" ? true : false}
-              >
-                Amapá
-              </option>
-              <option
-                value="Amazonas"
-                selected={Props.customer.state === "Amazonas" ? true : false}
-              >
-                Amazonas
-              </option>
-              <option
-                value="Bahia"
-                selected={Props.customer.state === "Bahia" ? true : false}
-              >
-                Bahia
-              </option>
-              <option
-                value="Ceará"
-                selected={Props.customer.state === "Ceará" ? true : false}
-              >
-                Ceará
-              </option>
-              <option
-                value="Distrito Federal"
-                selected={Props.customer.state === "Distrito" ? true : false}
-              >
-                Distrito Federal
-              </option>
-              <option
-                value="Espírito Santo"
-                selected={
-                  Props.customer.state === "Espírito Santo" ? true : false
-                }
-              >
-                Espírito Santo
-              </option>
-              <option
-                value="Goiás"
-                selected={Props.customer.state === "Goiás" ? true : false}
-              >
-                Goiás
-              </option>
-              <option
-                value="Maranhão"
-                selected={Props.customer.state === "Maranhão" ? true : false}
-              >
-                Maranhão
-              </option>
-              <option
-                value="Mato Grosso"
-                selected={Props.customer.state === "Mato Grosso" ? true : false}
-              >
-                Mato Grosso
-              </option>
-              <option
-                value="Mato Grosso do Sul"
-                selected={
-                  Props.customer.state === "Mato Grosso do Sul" ? true : false
-                }
-              >
-                Mato Grosso do Sul
-              </option>
-              <option
-                value="Minas Gerais"
-                selected={
-                  Props.customer.state === "Minas Gerais" ? true : false
-                }
-              >
-                Minas Gerais
-              </option>
-              <option
-                value="Pará"
-                selected={Props.customer.state === "Pará" ? true : false}
-              >
-                Pará
-              </option>
-              <option
-                value="Paraíba"
-                selected={Props.customer.state === "Paraíba" ? true : false}
-              >
-                Paraíba
-              </option>
-              <option
-                value="Paraná"
-                selected={Props.customer.state === "Paraná" ? true : false}
-              >
-                Paraná
-              </option>
-              <option
-                value="Pernambuco"
-                selected={Props.customer.state === "Pernambuco" ? true : false}
-              >
-                Pernambuco
-              </option>
-              <option
-                value="Piauí"
-                selected={Props.customer.state === "Piauí" ? true : false}
-              >
-                Piauí
-              </option>
-              <option
-                value="Rio de Janeiro"
-                selected={
-                  Props.customer.state === "Rio de Janeiro" ? true : false
-                }
-              >
-                Rio de Janeiro
-              </option>
-              <option
-                value="Rio Grande do Norte"
-                selected={
-                  Props.customer.state === "Rio Grande do Norte" ? true : false
-                }
-              >
-                Rio Grande do Norte
-              </option>
-              <option
-                value="Rio Grande do Sul"
-                selected={
-                  Props.customer.state === "Rio Grande do Sul" ? true : false
-                }
-              >
-                Rio Grande do Sul
-              </option>
-              <option
-                value="Rondônia"
-                selected={Props.customer.state === "Rondônia" ? true : false}
-              >
-                Rondônia
-              </option>
-              <option
-                value="Roraima"
-                selected={Props.customer.state === "Roraima" ? true : false}
-              >
-                Roraima
-              </option>
-              <option
-                value="Santa Catarina"
-                selected={
-                  Props.customer.state === "Santa Catarina" ? true : false
-                }
-              >
-                Santa Catarina
-              </option>
-              <option
-                value="São Paulo"
-                selected={Props.customer.state === "São Paulo" ? true : false}
-              >
-                São Paulo
-              </option>
-              <option
-                value="Sergipe"
-                selected={Props.customer.state === "Sergipe" ? true : false}
-              >
-                Sergipe
-              </option>
-              <option
-                value="Tocantins"
-                selected={Props.customer.state === "Tocantins" ? true : false}
-              >
-                Tocantins
-              </option>
+              <option value="AC">AC</option>
+              <option value="AL">AL</option>
+              <option value="AP">AP</option>
+              <option value="AM">AM</option>
+              <option value="BA">BA</option>
+              <option value="CE">CE</option>
+              <option value="DF">DF</option>
+              <option value="ES">ES</option>
+              <option value="GO">GO</option>
+              <option value="MA">MA</option>
+              <option value="MT">MT</option>
+              <option value="MS">MS</option>
+              <option value="MG">MG</option>
+              <option value="PA">PA</option>
+              <option value="PB">PB</option>
+              <option value="PR">PR</option>
+              <option value="PE">PE</option>
+              <option value="PI">PI</option>
+              <option value="RJ">RJ</option>
+              <option value="RN">RN</option>
+              <option value="RD">RD</option>
+              <option value="RO">RO</option>
+              <option value="RR">RR</option>
+              <option value="SC">SC</option>
+              <option value="SP">SP</option>
+              <option value="SE">SE</option>
+              <option value="TO">TO</option>
             </Select>
           </Field>
           <Field>
@@ -413,6 +256,17 @@ const CustomerFormUpdate: React.FC<Props> = (Props) => {
           <Button type="submit">Atualizar</Button>
         </Buttons>
       </Form>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Container>
   );
 };

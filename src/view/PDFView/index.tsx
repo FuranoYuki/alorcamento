@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import api from "../../service/http";
-import IPdf from "../../interfaces/IPdf";
 import { Container } from "./styles";
 
 interface Params {

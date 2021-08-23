@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,9 +16,20 @@ interface Props {
 }
 
 const ProductTableCell: React.FC<Props> = (Props) => {
+  const [date, setdate] = useState("");
+  const [time, settime] = useState("");
+
   const handlerClick = () => {
     Props.handlerDeleteRowClick(Props.budget._id);
   };
+
+  useEffect(() => {
+    const dateInfo = new Date(Props.budget.createdAt);
+    setdate(
+      `${dateInfo.getDate()}/${dateInfo.getMonth()}/${dateInfo.getFullYear()}`
+    );
+    settime(`${dateInfo.getHours()}:${dateInfo.getMinutes()}h`);
+  }, [Props.budget.createdAt]);
 
   return (
     <Container>
@@ -28,8 +39,11 @@ const ProductTableCell: React.FC<Props> = (Props) => {
       <Td> {Props.budget.city} </Td>
       <Td> {Props.budget.state} </Td>
       <Td> {Props.budget.qtd} </Td>
-      <Td> {Props.budget.total} </Td>
-      <Td> {Props.budget.createdAt} </Td>
+      <Td> R$ {Props.budget.total} </Td>
+      <Td>
+        {" "}
+        {date} <br /> {time}{" "}
+      </Td>
       <Td>
         <Link
           to={`/budget/pdf/budget/${Props.budget.budgetPDF}`}

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { toast, ToastContainer } from "react-toastify";
 
 import api from "../../service/http";
+import { successStyle, errorStyle } from "../Notifications";
 import { Container, Table, THeader, TBody, Field } from "./styles";
 import CustomerTableCell from "../CustomerTableCell";
 
@@ -28,10 +30,11 @@ const CustomerTable: React.FC = () => {
     api
       .post("/alorcamentos/customer/delete", { id })
       .then((res) => {
+        toast.success("Cliente excluido", successStyle);
         setcustomers(res.data.customers);
       })
-      .catch((error) => {
-        console.log("failed at delete customer", error);
+      .catch(() => {
+        toast.error("Falha ao excluir o cliente", errorStyle);
       });
   };
 
@@ -261,6 +264,17 @@ const CustomerTable: React.FC = () => {
           ))}
         </TBody>
       </Table>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Container>
   );
 };

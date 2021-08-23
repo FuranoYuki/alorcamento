@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
-  padding: 20px;
+  height: 100%;
+  padding: 40px 20px;
 
   background-color: var(--white-color);
 `;
@@ -41,8 +42,9 @@ export const Field = styled.div`
 
 export const Header = styled.div`
   display: flex;
-  align-items: flex-end;
-  gap: 0 10px;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 5px 10px;
 
   > span {
     display: none;

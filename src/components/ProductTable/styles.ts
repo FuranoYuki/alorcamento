@@ -33,6 +33,10 @@ export const Field = styled.div`
   font-weight: 600;
 
   color: var(--pink-color);
+
+  > svg {
+    display: none;
+  }
 `;
 
 export const TBody = styled.div`

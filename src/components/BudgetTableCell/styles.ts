@@ -20,6 +20,7 @@ export const Td = styled.div`
   width: 110px;
   font-size: 13px;
   font-weight: 600;
+  text-align: center;
 
   > a {
     font-size: 16px;

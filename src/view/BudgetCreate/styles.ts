@@ -156,6 +156,7 @@ export const PDFPreView = styled.div`
   > iframe {
     width: 800px;
     height: 500px;
+    max-width: 90%;
     margin: 0 auto;
     border-radius: 8px;
     border: 3px solid var(--pink-color);

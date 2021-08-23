@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+  display: flex;
+
   position: relative;
   width: 100%;
-  height: 100vh;
 
   background-color: var(--dark-blue);
 `;
@@ -17,6 +18,8 @@ export const Wrapper = styled.main`
   left: 50%;
   transform: translate(-50%, -50%);
 
+  background-color: var(--dark-blue);
+
   > span {
     margin-top: 20px;
 
@@ -25,6 +28,7 @@ export const Wrapper = styled.main`
     font-weight: 600;
     line-height: 21px;
     color: var(--pink-dark-color);
+    background-color: var(--dark-blue);
   }
 `;
 
@@ -75,13 +79,16 @@ export const Field = styled.div`
 `;
 
 export const Label = styled.label`
+  display: flex;
+  flex-direction: column;
+  gap: 5px 0;
+
   font-size: 14px;
   font-weight: 600;
   line-height: 21px;
   color: var(--gray-dark-color);
 
-  > span {
-    margin-left: 20px;
+  > span.warning {
     color: var(--salmon-color);
   }
 `;

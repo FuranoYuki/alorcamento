@@ -14,37 +14,49 @@ import { Container, Header, Image, List, Item } from "./styles";
 const NavBar: React.FC = () => {
   const state = useSelector<RootState>((state) => state.navBar);
   const navRef = useRef<HTMLDivElement>(null);
-  const clientRef = useRef<HTMLSpanElement>(null);
   const budgetRef = useRef<HTMLSpanElement>(null);
+  const productRef = useRef<HTMLSpanElement>(null);
+  const customerRef = useRef<HTMLSpanElement>(null);
+
   const field1Ref = useRef<HTMLAnchorElement>(null);
   const field2Ref = useRef<HTMLAnchorElement>(null);
+  const field3Ref = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     const nav = navRef.current as HTMLDivElement;
-    const client = clientRef.current as HTMLSpanElement;
     const budget = budgetRef.current as HTMLSpanElement;
+    const customer = customerRef.current as HTMLSpanElement;
+    const product = productRef.current as HTMLSpanElement;
+
     const field1 = field1Ref.current as HTMLAnchorElement;
     const field2 = field2Ref.current as HTMLAnchorElement;
+    const field3 = field3Ref.current as HTMLAnchorElement;
 
     if (state) {
       nav.style.width = 80 + "px";
-      client.style.display = "none";
       budget.style.display = "none";
+      product.style.display = "none";
+      customer.style.display = "none";
+
       field1.style.justifyContent = "center";
       field2.style.justifyContent = "center";
+      field3.style.justifyContent = "center";
     } else {
       nav.style.width = 200 + "px";
-      client.style.display = "flex";
       budget.style.display = "flex";
+      product.style.display = "flex";
+      customer.style.display = "flex";
+
       field1.style.justifyContent = "flex-start";
       field2.style.justifyContent = "flex-start";
+      field3.style.justifyContent = "flex-start";
     }
   }, [state]);
 
   return (
     <Container ref={navRef}>
       <Header>
-        <Link to="/home">
+        <Link to="/budget">
           <Image
             src="/Logo Rosa Fundo Transparente-03.png"
             alt="alopapers brand"
@@ -55,7 +67,7 @@ const NavBar: React.FC = () => {
         <Item>
           <Link to="/customer" ref={field1Ref}>
             <FontAwesomeIcon icon={faAddressCard} />
-            <span ref={clientRef}>Clientes</span>
+            <span ref={customerRef}>Clientes</span>
           </Link>
         </Item>
         <Item>
@@ -65,9 +77,9 @@ const NavBar: React.FC = () => {
           </Link>
         </Item>
         <Item>
-          <Link to="/product" ref={field2Ref}>
+          <Link to="/product" ref={field3Ref}>
             <FontAwesomeIcon icon={faPaste} />
-            <span ref={budgetRef}>Produtos</span>
+            <span ref={productRef}>Produtos</span>
           </Link>
         </Item>
       </List>

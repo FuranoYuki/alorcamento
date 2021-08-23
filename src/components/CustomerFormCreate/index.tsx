@@ -1,7 +1,11 @@
 import React, { useRef } from "react";
+import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 import api from "../../service/http";
+import "react-toastify/dist/ReactToastify.css";
+import { successStyle, errorStyle } from "../Notifications";
 import {
   Container,
   Form,
@@ -23,48 +27,51 @@ interface ApiError {
 }
 
 const CustomerFormCreate: React.FC = () => {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
+  const history = useHistory();
+
   const cpfRef = useRef<HTMLInputElement>(null);
   const cepRef = useRef<HTMLInputElement>(null);
-  const cityRef = useRef<HTMLInputElement>(null);
-  const stateRef = useRef<HTMLSelectElement>(null);
-  const neighborRef = useRef<HTMLInputElement>(null);
-  const addressRef = useRef<HTMLInputElement>(null);
   const cnpjRef = useRef<HTMLInputElement>(null);
+  const cityRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const stateRef = useRef<HTMLSelectElement>(null);
+  const addressRef = useRef<HTMLInputElement>(null);
+  const neighborRef = useRef<HTMLInputElement>(null);
   const phoneNumberRef = useRef<HTMLInputElement>(null);
 
-  const nameWarningRef = useRef<HTMLSpanElement>(null);
-  const emailWarningRef = useRef<HTMLSpanElement>(null);
   const cpfWarningRef = useRef<HTMLSpanElement>(null);
+  const nameWarningRef = useRef<HTMLSpanElement>(null);
   const cnpjWarningRef = useRef<HTMLSpanElement>(null);
-
-  const history = useHistory();
+  const emailWarningRef = useRef<HTMLSpanElement>(null);
 
   const handlerFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const name = nameRef.current as HTMLInputElement;
-    const email = emailRef.current as HTMLInputElement;
     const cpf = cpfRef.current as HTMLInputElement;
     const cep = cepRef.current as HTMLInputElement;
-    const city = cityRef.current as HTMLInputElement;
-    const state = stateRef.current as HTMLSelectElement;
-    const neighbor = neighborRef.current as HTMLInputElement;
-    const address = addressRef.current as HTMLInputElement;
     const cnpj = cnpjRef.current as HTMLInputElement;
+    const city = cityRef.current as HTMLInputElement;
+    const name = nameRef.current as HTMLInputElement;
+    const email = emailRef.current as HTMLInputElement;
+    const state = stateRef.current as HTMLSelectElement;
+    const address = addressRef.current as HTMLInputElement;
+    const neighbor = neighborRef.current as HTMLInputElement;
     const phoneNumber = phoneNumberRef.current as HTMLInputElement;
-    const nameWarning = nameWarningRef.current as HTMLSpanElement;
-    const emailWarning = emailWarningRef.current as HTMLSpanElement;
-    const cnpjWarning = cnpjWarningRef.current as HTMLSpanElement;
+
     const cpfWarning = cpfWarningRef.current as HTMLSpanElement;
+    const nameWarning = nameWarningRef.current as HTMLSpanElement;
+    const cnpjWarning = cnpjWarningRef.current as HTMLSpanElement;
+    const emailWarning = emailWarningRef.current as HTMLSpanElement;
 
     if (!name.value) {
       nameWarning.style.display = "flex";
+      toast.error("Nome necessario para o cadastro", errorStyle);
     }
 
     if (!email.value) {
       emailWarning.style.display = "flex";
+      toast.error("Email necessario para o cadastro", errorStyle);
     }
 
     if (name.value) {
@@ -78,21 +85,27 @@ const CustomerFormCreate: React.FC = () => {
     if (name.value != "" && email.value != "") {
       api
         .post("/alorcamentos/customer/create", {
-          name: name.value,
-          email: email.value,
-          cpf: cpf.value,
-          cep: cep.value,
-          city: city.value,
-          state: state.value,
-          neighbor: neighbor.value,
-          address: address.value,
-          cnpj: cnpj.value,
-          phoneNumber: phoneNumber.value,
+          cpf: cpf.value.trim(),
+          cep: cep.value.trim(),
+          city: city.value.trim(),
+          cnpj: cnpj.value.trim(),
+          name: name.value.trim(),
+          state: state.value.trim(),
+          email: email.value.trim(),
+          address: address.value.trim(),
+          neighbor: neighbor.value.trim(),
+          phoneNumber: phoneNumber.value.trim(),
         })
         .then(() => {
-          history.push("/customer");
+          toast.success("Cliente Cadastrado", successStyle);
+
+          setTimeout(() => {
+            history.push("/customer");
+          }, 3000);
         })
         .catch((error) => {
+          toast.error("Problema ao cadastrar Cliente", errorStyle);
+
           const problem = error.response.data as ApiError;
           if (problem.emailExist) {
             emailWarning.style.display = "flex";
@@ -111,6 +124,28 @@ const CustomerFormCreate: React.FC = () => {
 
   const handlerBackClick = () => {
     history.goBack();
+  };
+
+  const handlerCEPBlur = (e: React.FocusEvent) => {
+    const obj = e.currentTarget as HTMLInputElement;
+    axios
+      .get(`https://viacep.com.br/ws/${obj.value.trim()}/json/`)
+      .then((res) => {
+        const city = cityRef.current as HTMLInputElement;
+        const state = stateRef.current as HTMLSelectElement;
+        const address = addressRef.current as HTMLInputElement;
+        const neighbor = neighborRef.current as HTMLInputElement;
+
+        state.value = res.data.uf;
+        city.value = res.data.localidade;
+        neighbor.value = res.data.bairro;
+        address.value = res.data.logradouro;
+
+        toast.success("Endereco encontrado", successStyle);
+      })
+      .catch(() => {
+        toast.error("CEP nao encontrado", errorStyle);
+      });
   };
 
   return (
@@ -143,7 +178,7 @@ const CustomerFormCreate: React.FC = () => {
               <Label htmlFor="cep">CEP</Label>
               <span>Error</span>
             </Header>
-            <Input id="cep" name="cep" ref={cepRef} />
+            <Input id="cep" name="cep" ref={cepRef} onBlur={handlerCEPBlur} />
           </Field>
           <Field>
             <Header>
@@ -159,33 +194,33 @@ const CustomerFormCreate: React.FC = () => {
             </Header>
             <Select id="state" name="state" ref={stateRef}>
               <option value=""></option>
-              <option value="Acre">Acre</option>
-              <option value="Alagoas">Alagoas</option>
-              <option value="Amapá">Amapá</option>
-              <option value="Amazonas">Amazonas</option>
-              <option value="Bahia">Bahia</option>
-              <option value="Ceará">Ceará</option>
-              <option value="Distrito Federal">Distrito Federal</option>
-              <option value="Espírito Santo">Espírito Santo</option>
-              <option value="Goiás">Goiás</option>
-              <option value="Maranhão">Maranhão</option>
-              <option value="Mato Grosso">Mato Grosso</option>
-              <option value="Mato Grosso do Sul">Mato Grosso do Sul</option>
-              <option value="Minas Gerais">Minas Gerais</option>
-              <option value="Pará">Pará</option>
-              <option value="Paraíba">Paraíba</option>
-              <option value="Paraná">Paraná</option>
-              <option value="Pernambuco">Pernambuco</option>
-              <option value="Piauí">Piauí</option>
-              <option value="Rio de Janeiro">Rio de Janeiro</option>
-              <option value="Rio Grande do Norte">Rio Grande do Norte</option>
-              <option value="Rio Grande do Sul">Rio Grande do Sul</option>
-              <option value="Rondônia">Rondônia</option>
-              <option value="Roraima">Roraima</option>
-              <option value="Santa Catarina">Santa Catarina</option>
-              <option value="São Paulo">São Paulo</option>
-              <option value="Sergipe">Sergipe</option>
-              <option value="Tocantins">Tocantins</option>
+              <option value="AC">AC</option>
+              <option value="AL">AL</option>
+              <option value="AP">AP</option>
+              <option value="AM">AM</option>
+              <option value="BA">BA</option>
+              <option value="CE">CE</option>
+              <option value="DF">DF</option>
+              <option value="ES">ES</option>
+              <option value="GO">GO</option>
+              <option value="MA">MA</option>
+              <option value="MT">MT</option>
+              <option value="MS">MS</option>
+              <option value="MG">MG</option>
+              <option value="PA">PA</option>
+              <option value="PB">PB</option>
+              <option value="PR">PR</option>
+              <option value="PE">PE</option>
+              <option value="PI">PI</option>
+              <option value="RJ">RJ</option>
+              <option value="RN">RN</option>
+              <option value="RD">RD</option>
+              <option value="RO">RO</option>
+              <option value="RR">RR</option>
+              <option value="SC">SC</option>
+              <option value="SP">SP</option>
+              <option value="SE">SE</option>
+              <option value="TO">TO</option>
             </Select>
           </Field>
           <Field>
@@ -223,6 +258,17 @@ const CustomerFormCreate: React.FC = () => {
           </ButtonBack>
           <Button type="submit">Cadastrar</Button>
         </Buttons>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </Form>
     </Container>
   );
