@@ -165,7 +165,7 @@ const CustomerFormCreate: React.FC = () => {
         neighbor.value = res.data.bairro;
         address.value = res.data.logradouro;
 
-        toast.success("Endereco encontrado", successStyle);
+        toast.success("CEP encontrado", successStyle);
       })
       .catch(() => {
         toast.error("CEP nao encontrado", errorStyle);
@@ -194,7 +194,7 @@ const CustomerFormCreate: React.FC = () => {
             <Header>
               <Label htmlFor="cpf">CPF</Label>
               <span ref={cpfWarningRef}>CPF já cadastrado</span>
-              <span>CPF possui no mínimo 11 algarismos</span>
+              <span ref={cpfEmptyRef}>CPF possui no mínimo 11 algarismos</span>
             </Header>
             <Input id="cpf" name="cpf" ref={cpfRef} />
           </Field>
@@ -266,6 +266,9 @@ const CustomerFormCreate: React.FC = () => {
             <Header>
               <Label htmlFor="cnpj">CNPJ</Label>
               <span ref={cnpjWarningRef}>CNPJ já cadastrado</span>
+              <span ref={cnpjEmptyRef}>
+                CNPJ deve ter no minimo 14 algarismo
+              </span>
             </Header>
             <Input id="cnpj" name="cnpj" ref={cnpjRef} />
           </Field>
