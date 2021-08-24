@@ -54,7 +54,7 @@ const Routes = (): JSX.Element => (
       <PrivateRoute exact path="/product" component={Product} />
       <PrivateRoute exact path="/product/create" component={ProductCreate} />
 
-      <PrivateRoute exact path="/budget/pdf/:type/:id" component={PDFView} />
+      <PrivateRoute path="/budget/pdf/:type/:id" component={PDFView} />
     </Switch>
   </BrowserRouter>
 );
