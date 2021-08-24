@@ -39,7 +39,6 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
   const addressRef = useRef<HTMLInputElement>(null);
   const neighborRef = useRef<HTMLInputElement>(null);
   const phoneNumberRef = useRef<HTMLInputElement>(null);
-  const sendingAddressRef = useRef<HTMLInputElement>(null);
 
   const cpfAutoRef = useRef<HTMLInputElement>(null);
   const cnpjAutoRef = useRef<HTMLInputElement>(null);
@@ -47,11 +46,11 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
   const warningErrorRef = useRef<HTMLDivElement>(null);
   const warningExistRef = useRef<HTMLDivElement>(null);
 
-  const handlerInputBlur = (e: React.FocusEvent | null = null) => {
+  const handlerInputBlur = async (e: React.FocusEvent | null = null) => {
     if (e) {
       const obj = e.currentTarget as HTMLInputElement | HTMLSelectElement;
       if (obj.id === "cep") {
-        axios
+        await axios
           .get(`https://viacep.com.br/ws/${obj.value.trim()}/json/`)
           .then((res) => {
             const city = cityRef.current as HTMLInputElement;
@@ -83,7 +82,6 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
       address: addressRef.current?.value.trim(),
       neighbor: neighborRef.current?.value.trim(),
       phoneNumber: phoneNumberRef.current?.value.trim(),
-      sendingAddress: sendingAddressRef.current?.value.trim(),
     };
 
     Props.handlerCustomer(customer);
@@ -271,16 +269,6 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
             onBlur={handlerInputBlur}
           />
         </Field>
-        <Field>
-          <Label htmlFor="sendingAddress">Endereço de entrega</Label>
-          <Input
-            id="sendingAddress"
-            name="sendingAddress"
-            type="text"
-            ref={sendingAddressRef}
-            onBlur={handlerInputBlur}
-          />
-        </Field>
       </Fields>
       <AutoCode onSubmit={handlerFormSubmit}>
         <AutoInputs>
@@ -326,7 +314,7 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-      />{" "}
+      />
     </Container>
   );
 };

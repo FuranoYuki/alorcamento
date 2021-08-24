@@ -1,19 +1,22 @@
 import React, { useState, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { PDFViewer, pdf } from "@react-pdf/renderer";
-import { faCalculator } from "@fortawesome/free-solid-svg-icons";
 import { toast, ToastContainer } from "react-toastify";
+import { faCalculator } from "@fortawesome/free-solid-svg-icons";
 
-import { successStyle, errorStyle } from "../../components/Notifications";
+import api from "../../service/http";
 import IProduct from "../../interfaces/IProduct";
 import ICustomer from "../../interfaces/ICustomer";
-import api from "../../service/http";
-import HeaderTop from "../../components/HeaderTop";
-import BudgetAddCustomer from "../../components/BudgetAddCustomer";
-import BudgetAddProduct from "../../components/BudgetAddProduct";
-import PDFDownload from "../../components/PDFDownload";
-import PDFGuia from "../../components/PDFGuia";
+import ISendingAddress from "../../interfaces/ISendingAddress";
+import { successStyle, errorStyle } from "../../components/Notifications";
+
 import NavBar from "../../components/NavBar";
+import PDFGuia from "../../components/PDFGuia";
+import HeaderTop from "../../components/HeaderTop";
+import PDFDownload from "../../components/PDFDownload";
+import BudgetAddProduct from "../../components/BudgetAddProduct";
+import BudgetAddAddress from "../../components/BudgetAddAddress";
+import BudgetAddCustomer from "../../components/BudgetAddCustomer";
 import {
   Container,
   TopSection,
@@ -33,6 +36,7 @@ const BudgetCreate: React.FC = () => {
   const pdfBoxRef = useRef<HTMLDivElement>(null);
   const [customer, setcustomer] = useState<ICustomer>({});
   const [products, setproducts] = useState<IProduct[]>([]);
+  const [sendingAddress, setsendingAddress] = useState<ISendingAddress>({});
 
   const handlerProcuts = (prod: IProduct[]) => {
     setproducts(prod);
@@ -42,9 +46,17 @@ const BudgetCreate: React.FC = () => {
     setcustomer(cust);
   };
 
+  const handlerSendingAddresss = (send: ISendingAddress) => {
+    setsendingAddress(send);
+  };
+
   const handlerButtonCreateClick = async () => {
     const blobBudget = await pdf(
-      <PDFDownload products={products} customer={customer} />
+      <PDFDownload
+        products={products}
+        customer={customer}
+        sendingAddress={sendingAddress}
+      />
     ).toBlob();
 
     const blobGuia = await pdf(
@@ -112,6 +124,7 @@ const BudgetCreate: React.FC = () => {
           <Buttons></Buttons>
         </TopSection>
         <BudgetAddCustomer handlerCustomer={handlerCustomer} />
+        <BudgetAddAddress handlerSendingAddresss={handlerSendingAddresss} />
         <BudgetAddProduct handlerProcuts={handlerProcuts} />
         <Buttons>
           <ButtonCreate onClick={handlerButtonCreateClick} type="button">
@@ -123,7 +136,11 @@ const BudgetCreate: React.FC = () => {
         </Buttons>
         <PDFPreView ref={pdfBoxRef}>
           <PDFViewer>
-            <PDFDownload products={products} customer={customer} />
+            <PDFDownload
+              products={products}
+              customer={customer}
+              sendingAddress={sendingAddress}
+            />
           </PDFViewer>
         </PDFPreView>
       </Content>

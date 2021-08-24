@@ -8,12 +8,14 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 
-import ICustomer from "../../interfaces/ICustomer";
 import IProduct from "../../interfaces/IProduct";
+import ICustomer from "../../interfaces/ICustomer";
+import ISendingAddress from "../../interfaces/ISendingAddress";
 
 interface Props {
   customer: ICustomer;
   products: IProduct[];
+  sendingAddress: ISendingAddress;
 }
 
 const styles = StyleSheet.create({
@@ -398,25 +400,30 @@ const PDFDownload: React.FC<Props> = (Props) => {
             <View style={styles.customerInfoRow}>
               <View style={styles.infoLongFieldName}>
                 <Text style={styles.label}>Endereço:</Text>
-                <Text style={styles.input}>{Props.customer.name}</Text>
+                <Text style={styles.input}>
+                  {Props.sendingAddress.address}
+                  {Props.sendingAddress.complement}
+                </Text>
               </View>
               <View style={styles.infoLongFieldVendedor}>
                 <Text style={styles.label}>CEP:</Text>
-                <Text style={styles.input}>03050000</Text>
+                <Text style={styles.input}>{Props.sendingAddress.cep}</Text>
               </View>
             </View>
             <View style={styles.customerInfoRow}>
               <View style={styles.infoShortFieldMid}>
                 <Text style={styles.label}>Bairro:</Text>
-                <Text style={styles.input}>Bras</Text>
+                <Text style={styles.input}>
+                  {Props.sendingAddress.neighbor}
+                </Text>
               </View>
               <View style={styles.infoShortFieldMid}>
                 <Text style={styles.label}>Cidade:</Text>
-                <Text style={styles.input}>Sao Paulo</Text>
+                <Text style={styles.input}>{Props.sendingAddress.city}</Text>
               </View>
               <View style={styles.infoLongFieldVendedor}>
                 <Text style={styles.label}>Estado:</Text>
-                <Text style={styles.input}>SP</Text>
+                <Text style={styles.input}>{Props.sendingAddress.state}</Text>
               </View>
             </View>
           </View>

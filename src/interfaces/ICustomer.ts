@@ -10,7 +10,6 @@ interface ICustomer {
   email?: string;
   cnpj?: string;
   cpf?: string;
-  sendingAddress?: string;
 }
 
 export default ICustomer;

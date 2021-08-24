@@ -298,6 +298,12 @@ const styles = StyleSheet.create({
     borderColor: "black",
     color: "black",
   },
+  sendingAddress: {
+    fontSize: 16,
+    textAlign: "center",
+
+    color: "black",
+  },
 });
 
 const PDFGuia: React.FC<Props> = (Props) => {
@@ -362,12 +368,8 @@ const PDFGuia: React.FC<Props> = (Props) => {
             </View>
             <View style={styles.customerInfoRow}>
               <View style={styles.infoLongFieldName}>
-                <Text style={styles.label}>
-                  Endereco / Endereço de entrega:
-                </Text>
-                <Text style={styles.input}>
-                  {Props.customer.address} / {Props.customer.sendingAddress}
-                </Text>
+                <Text style={styles.label}>Endereco:</Text>
+                <Text style={styles.input}>{Props.customer.address}</Text>
               </View>
               <View style={styles.infoLongFieldVendedor}>
                 <Text style={styles.label}>Bairro:</Text>
@@ -389,42 +391,67 @@ const PDFGuia: React.FC<Props> = (Props) => {
               </View>
             </View>
           </View>
-          <View style={styles.productsInfo} wrap={true}>
-            <View style={styles.productInfoHeader}>
-              <View style={styles.imageHeader}>
-                <Text>Imagem</Text>
+          <View style={styles.sendingAddress}>
+            <Text>Endereço de entrega</Text>
+          </View>
+          <View style={styles.customerInfo}>
+            <View style={styles.customerInfoRow}>
+              <View style={styles.infoLongFieldName}>
+                <Text style={styles.label}>Endereço:</Text>
+                <Text style={styles.input}>{Props.customer.name}</Text>
               </View>
-              <View style={styles.nameHeader}>
-                <Text>Nome</Text>
-              </View>
-              <View style={styles.qtdHeader}>
-                <Text>QTD</Text>
-              </View>
-              <View style={styles.qtdHeader}>
-                <Text>Area (m²)</Text>
+              <View style={styles.infoLongFieldVendedor}>
+                <Text style={styles.label}>CEP:</Text>
+                <Text style={styles.input}>03050000</Text>
               </View>
             </View>
-            {Props.products.map((product) => (
-              <View
-                style={styles.productInfoRow}
-                key={product._id}
-                wrap={false}
-              >
-                <View style={styles.imageRow}>
-                  <Image src={product.image} />
-                </View>
-                <View style={styles.nameRow}>
-                  <Text>{product.name}</Text>
-                </View>
-                <View style={styles.qtdRow}>
-                  <Text>{product.qtd}</Text>
-                </View>
-                <View style={styles.qtdRow}>
-                  <Text>{product.area}m²</Text>
-                </View>
+            <View style={styles.customerInfoRow}>
+              <View style={styles.infoShortFieldMid}>
+                <Text style={styles.label}>Bairro:</Text>
+                <Text style={styles.input}>Bras</Text>
               </View>
-            ))}
+              <View style={styles.infoShortFieldMid}>
+                <Text style={styles.label}>Cidade:</Text>
+                <Text style={styles.input}>Sao Paulo</Text>
+              </View>
+              <View style={styles.infoLongFieldVendedor}>
+                <Text style={styles.label}>Estado:</Text>
+                <Text style={styles.input}>SP</Text>
+              </View>
+            </View>
           </View>
+        </View>
+        <View style={styles.productsInfo} wrap={true}>
+          <View style={styles.productInfoHeader}>
+            <View style={styles.imageHeader}>
+              <Text>Imagem</Text>
+            </View>
+            <View style={styles.nameHeader}>
+              <Text>Nome</Text>
+            </View>
+            <View style={styles.qtdHeader}>
+              <Text>QTD</Text>
+            </View>
+            <View style={styles.qtdHeader}>
+              <Text>Area (m²)</Text>
+            </View>
+          </View>
+          {Props.products.map((product) => (
+            <View style={styles.productInfoRow} key={product._id} wrap={false}>
+              <View style={styles.imageRow}>
+                <Image src={product.image} />
+              </View>
+              <View style={styles.nameRow}>
+                <Text>{product.name}</Text>
+              </View>
+              <View style={styles.qtdRow}>
+                <Text>{product.qtd}</Text>
+              </View>
+              <View style={styles.qtdRow}>
+                <Text>{product.area}m²</Text>
+              </View>
+            </View>
+          ))}
         </View>
       </Page>
     </Document>

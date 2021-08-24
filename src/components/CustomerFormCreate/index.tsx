@@ -40,6 +40,9 @@ const CustomerFormCreate: React.FC = () => {
   const neighborRef = useRef<HTMLInputElement>(null);
   const phoneNumberRef = useRef<HTMLInputElement>(null);
 
+  const cpfEmptyRef = useRef<HTMLSpanElement>(null);
+  const cnpjEmptyRef = useRef<HTMLSpanElement>(null);
+
   const cpfWarningRef = useRef<HTMLSpanElement>(null);
   const nameWarningRef = useRef<HTMLSpanElement>(null);
   const cnpjWarningRef = useRef<HTMLSpanElement>(null);
@@ -59,6 +62,9 @@ const CustomerFormCreate: React.FC = () => {
     const neighbor = neighborRef.current as HTMLInputElement;
     const phoneNumber = phoneNumberRef.current as HTMLInputElement;
 
+    const cpfEmpty = cpfEmptyRef.current as HTMLSpanElement;
+    const cnpjEmpty = cnpjEmptyRef.current as HTMLSpanElement;
+
     const cpfWarning = cpfWarningRef.current as HTMLSpanElement;
     const nameWarning = nameWarningRef.current as HTMLSpanElement;
     const cnpjWarning = cnpjWarningRef.current as HTMLSpanElement;
@@ -74,12 +80,30 @@ const CustomerFormCreate: React.FC = () => {
       toast.error("Email necessario para o cadastro", errorStyle);
     }
 
+    if (cpf.value.length < 11) {
+      cpfEmpty.style.display = "flex";
+      toast.error("CPF incorreto", errorStyle);
+    }
+
+    if (cnpj.value.length < 14) {
+      cnpjEmpty.style.display = "flex";
+      toast.error("CNPJ incorreto", errorStyle);
+    }
+
     if (name.value) {
       nameWarning.style.display = "none";
     }
 
     if (email.value) {
       emailWarning.style.display = "none";
+    }
+
+    if (cpf.value) {
+      cpfEmpty.style.display = "none";
+    }
+
+    if (cnpj.value) {
+      cnpjEmpty.style.display = "none";
     }
 
     if (name.value != "" && email.value != "") {
@@ -170,6 +194,7 @@ const CustomerFormCreate: React.FC = () => {
             <Header>
               <Label htmlFor="cpf">CPF</Label>
               <span ref={cpfWarningRef}>CPF já cadastrado</span>
+              <span>CPF possui no mínimo 11 algarismos</span>
             </Header>
             <Input id="cpf" name="cpf" ref={cpfRef} />
           </Field>
