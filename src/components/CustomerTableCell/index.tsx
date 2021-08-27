@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
@@ -53,4 +53,4 @@ const CustomerTableCell: React.FC<Props> = (Props) => {
   );
 };
 
-export default CustomerTableCell;
+export default memo(CustomerTableCell);

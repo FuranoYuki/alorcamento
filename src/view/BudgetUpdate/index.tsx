@@ -1,15 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserTie } from "@fortawesome/free-solid-svg-icons";
+import { faCalculator } from "@fortawesome/free-solid-svg-icons";
 
 import NavBar from "../../components/NavBar";
 import HeaderTop from "../../components/HeaderTop";
-import CustomerFormCreate from "../../components/CustomerFormCreate";
-import { Container, Content, TopSection, Top, Title, Bottom } from "./styles";
+import BudgetFormUpdate from "../../components/BudgetFormUpdate";
+import { Container, Content, TopSection, Top, Title } from "./styles";
 
-const CustomerCreate: React.FC = () => {
+const BudgetUpdate: React.FC = () => {
   return (
     <Container>
       <NavBar />
@@ -17,18 +16,11 @@ const CustomerCreate: React.FC = () => {
         <HeaderTop />
         <TopSection>
           <Top>
-            <FontAwesomeIcon icon={faUserTie} />
-            <Title>Cadastro de Cliente</Title>
+            <FontAwesomeIcon icon={faCalculator} />
+            <Title>Editar Orçamento</Title>
           </Top>
-          <Bottom>
-            <Link to="/">Home</Link>
-            <span> &gt; </span>
-            <Link to="/customer">Clientes</Link>
-            <span> &gt; </span>
-            <Link to="/customer/cadastro">Cadastro</Link>
-          </Bottom>
         </TopSection>
-        <CustomerFormCreate />
+        <BudgetFormUpdate />
         <ToastContainer
           position="top-right"
           autoClose={3000}
@@ -45,4 +37,4 @@ const CustomerCreate: React.FC = () => {
   );
 };
 
-export default CustomerCreate;
+export default BudgetUpdate;

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { faCalculator } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -44,6 +45,17 @@ const Budget: React.FC = () => {
         </TopSection>
         <BudgetContent />
       </Content>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Container>
   );
 };

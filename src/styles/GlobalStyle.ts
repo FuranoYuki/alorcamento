@@ -37,6 +37,7 @@ export default createGlobalStyle`
         --white-text: #ffffff;
         --pink-color: rgb(224, 75, 107);
         --pink-dark-color: rgb(225,42,82);
+        --wood-color: rgb(235,214,200)
     }
 
 `;

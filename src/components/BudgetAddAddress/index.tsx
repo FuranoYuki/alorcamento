@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, memo } from "react";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import { successStyle, errorStyle } from "../Notifications";
 import ISendingAddress from "../../interfaces/ISendingAddress";
@@ -45,6 +45,12 @@ const BudgetAddAddress: React.FC<Props> = (Props) => {
           city.value = res.data.localidade;
           neighbor.value = res.data.bairro;
           address.value = res.data.logradouro;
+
+          const option = document.getElementById(
+            `${res.data.uf}_Sending`
+          ) as HTMLOptionElement;
+
+          option.selected = true;
 
           toast.success("CEP de entrega encontrado", successStyle);
         })
@@ -129,50 +135,93 @@ const BudgetAddAddress: React.FC<Props> = (Props) => {
               onBlur={handlerInputsBlur}
             >
               <option value=""></option>
-              <option value="AC">AC</option>
-              <option value="AL">AL</option>
-              <option value="AP">AP</option>
-              <option value="AM">AM</option>
-              <option value="BA">BA</option>
-              <option value="CE">CE</option>
-              <option value="DF">DF</option>
-              <option value="ES">ES</option>
-              <option value="GO">GO</option>
-              <option value="MA">MA</option>
-              <option value="MT">MT</option>
-              <option value="MS">MS</option>
-              <option value="MG">MG</option>
-              <option value="PA">PA</option>
-              <option value="PB">PB</option>
-              <option value="PR">PR</option>
-              <option value="PE">PE</option>
-              <option value="PI">PI</option>
-              <option value="RJ">RJ</option>
-              <option value="RN">RN</option>
-              <option value="RD">RD</option>
-              <option value="RO">RO</option>
-              <option value="RR">RR</option>
-              <option value="SC">SC</option>
-              <option value="SP">SP</option>
-              <option value="SE">SE</option>
-              <option value="TO">TO</option>
+              <option value="AC" id="AC_Sending">
+                AC
+              </option>
+              <option value="AL" id="AL_Sending">
+                AL
+              </option>
+              <option value="AP" id="AP_Sending">
+                AP
+              </option>
+              <option value="AM" id="AM_Sending">
+                AM
+              </option>
+              <option value="BA" id="BA_Sending">
+                BA
+              </option>
+              <option value="CE" id="CE_Sending">
+                CE
+              </option>
+              <option value="DF" id="DF_Sending">
+                DF
+              </option>
+              <option value="ES" id="ES_Sending">
+                ES
+              </option>
+              <option value="GO" id="GO_Sending">
+                GO
+              </option>
+              <option value="MA" id="MA_Sending">
+                MA
+              </option>
+              <option value="MT" id="MT_Sending">
+                MT
+              </option>
+              <option value="MS" id="MS_Sending">
+                MS
+              </option>
+              <option value="MG" id="MG_Sending">
+                MG
+              </option>
+              <option value="PA" id="PA_Sending">
+                PA
+              </option>
+              <option value="PB" id="PB_Sending">
+                PB
+              </option>
+              <option value="PR" id="PR_Sending">
+                PR
+              </option>
+              <option value="PE" id="PE_Sending">
+                PE
+              </option>
+              <option value="PI" id="PI_Sending">
+                PI
+              </option>
+              <option value="RJ" id="RJ_Sending">
+                RJ
+              </option>
+              <option value="RN" id="RN_Sending">
+                RN
+              </option>
+              <option value="RD" id="RD_Sending">
+                RD
+              </option>
+              <option value="RO" id="RO_Sending">
+                RO
+              </option>
+              <option value="RR" id="RR_Sending">
+                RR
+              </option>
+              <option value="SC" id="SC_Sending">
+                SC
+              </option>
+              <option value="SP" id="SP_Sending">
+                SP
+              </option>
+              <option value="SE" id="SE_Sending">
+                SE
+              </option>
+              <option value="TO" id="TO_Sending">
+                TO
+              </option>
             </Select>
           </Field>
         </Fields>
       </Wrapper>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </Container>
   );
 };
 
-export default BudgetAddAddress;
+export default memo(BudgetAddAddress);

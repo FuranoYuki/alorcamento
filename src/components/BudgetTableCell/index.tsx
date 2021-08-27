@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faCalculator,
   faBoxOpen,
   faTrashAlt,
+  faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
 import IBudget from "../../interfaces/IBudget";
-import { Container, Td, TdRemove } from "./styles";
+import { Container, Td, TdRemove, TdEdit } from "./styles";
 
 interface Props {
   budget: IBudget;
@@ -26,7 +28,9 @@ const ProductTableCell: React.FC<Props> = (Props) => {
   useEffect(() => {
     const dateInfo = new Date(Props.budget.createdAt);
     setdate(
-      `${dateInfo.getDate()}/${dateInfo.getMonth()}/${dateInfo.getFullYear()}`
+      `${dateInfo.getDate()}/${
+        dateInfo.getMonth() + 1
+      }/${dateInfo.getFullYear()}`
     );
     settime(`${dateInfo.getHours()}:${dateInfo.getMinutes()}h`);
   }, [Props.budget.createdAt]);
@@ -44,6 +48,7 @@ const ProductTableCell: React.FC<Props> = (Props) => {
         {" "}
         {date} <br /> {time}{" "}
       </Td>
+      <Td> {Props.budget.paid} </Td>
       <Td>
         <Link
           to={`/budget/pdf/budget/${Props.budget.budgetPDF}`}
@@ -57,6 +62,11 @@ const ProductTableCell: React.FC<Props> = (Props) => {
           <FontAwesomeIcon icon={faBoxOpen} />
         </Link>
       </Td>
+      <TdEdit>
+        <Link to={`/budget/update/${Props.budget._id}`}>
+          <FontAwesomeIcon icon={faEdit} />
+        </Link>
+      </TdEdit>
       <TdRemove onClick={handlerClick}>
         <FontAwesomeIcon icon={faTrashAlt} />
       </TdRemove>
@@ -64,4 +74,4 @@ const ProductTableCell: React.FC<Props> = (Props) => {
   );
 };
 
-export default ProductTableCell;
+export default memo(ProductTableCell);

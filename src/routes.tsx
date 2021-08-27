@@ -15,6 +15,7 @@ import ProductCreate from "./view/ProductCreate";
 
 import Budget from "./view/Budget";
 import BudgetCreate from "./view/BudgetCreate";
+import BudgetUpdate from "./view/BudgetUpdate";
 
 import PDFView from "./view/PDFView";
 
@@ -42,6 +43,7 @@ const Routes = (): JSX.Element => (
       <PrivateRoute exact path="/" component={Budget} />
       <PrivateRoute exact path="/budget" component={Budget} />
       <PrivateRoute exact path="/budget/create" component={BudgetCreate} />
+      <PrivateRoute exact path="/budget/update/:id" component={BudgetUpdate} />
 
       <PrivateRoute exact path="/customer" component={Customer} />
       <PrivateRoute exact path="/customer/create" component={CustomerCreate} />
@@ -54,7 +56,7 @@ const Routes = (): JSX.Element => (
       <PrivateRoute exact path="/product" component={Product} />
       <PrivateRoute exact path="/product/create" component={ProductCreate} />
 
-      <PrivateRoute path="/budget/pdf/:type/:id" component={PDFView} />
+      <PrivateRoute exact path="/budget/pdf/:type/:id" component={PDFView} />
     </Switch>
   </BrowserRouter>
 );

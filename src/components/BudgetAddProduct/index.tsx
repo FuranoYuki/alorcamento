@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, memo } from "react";
+import { toast } from "react-toastify";
 
 import IProduct from "../../interfaces/IProduct";
+import { errorStyle } from "../Notifications";
 import BudgetAddProductField from "../BudgetAddProductField";
 import {
   Container,
@@ -26,9 +28,12 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
   const id = useRef("0");
   const qtdRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
+  const widthRef = useRef<HTMLInputElement>(null);
   const imageRef = useRef<HTMLInputElement>(null);
   const valueRef = useRef<HTMLInputElement>(null);
-  const areaRef = useRef<HTMLInputElement>(null);
+  const finishRef = useRef<HTMLInputElement>(null);
+  const heightRef = useRef<HTMLInputElement>(null);
+
   // const totalRef = useRef<HTMLInputElement>(null);
   const [products, setProducts] = useState<IProduct[]>([]);
 
@@ -42,38 +47,113 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
     setProducts([...updatedProducts]);
   };
 
-  const handlerButtonClick = () => {
+  const objectRef = () => {
     const qtd = qtdRef.current as HTMLInputElement;
     const name = nameRef.current as HTMLInputElement;
     const image = imageRef.current as HTMLInputElement;
-    const price = valueRef.current as HTMLInputElement;
-    const area = areaRef.current as HTMLInputElement;
+    const value = valueRef.current as HTMLInputElement;
+    const width = widthRef.current as HTMLInputElement;
+    const finish = finishRef.current as HTMLInputElement;
+    const height = heightRef.current as HTMLInputElement;
 
-    if (qtd.value && name.value && image.value && price.value && area.value) {
+    return {
+      qtd,
+      name,
+      image,
+      value,
+      width,
+      finish,
+      height,
+    };
+  };
+
+  const objectValues = (): IProduct | false => {
+    const { qtd, name, image, value, width, finish, height } = objectRef();
+
+    if (
+      qtd.value &&
+      name.value &&
+      image.value &&
+      value.value &&
+      width.value &&
+      finish.value &&
+      height.value
+    ) {
       id.current = String(Number(id.current) + 1);
 
-      const newProduct: IProduct = {
+      return {
         qtd: qtd.value.trim(),
-        name: name.value.trim(),
-        image: URL.createObjectURL(image.files?.item(0)),
-        value: price.value.replace(",", ".").trim(),
         _id: id.current.trim(),
-        area: area.value.trim(),
-        total: String(
-          (Number(qtd.value.trim()) * Number(price.value.trim())).toFixed(2)
+        name: name.value.trim(),
+        finish: finish.value.trim(),
+        value: value.value.trim().replace(",", "."),
+        width: width.value.trim().replace(",", "."),
+        height: height.value.trim().replace(",", "."),
+        image: URL.createObjectURL(image.files?.item(0)),
+        area: String(
+          (Number(height.value.trim()) * Number(width.value.trim())).toFixed(2)
         ),
+        total: String(
+          (Number(qtd.value.trim()) * Number(value.value.trim())).toFixed(2)
+        ),
+      };
+    } else {
+      return false;
+    }
+  };
+
+  const objectChange = () => {
+    const { qtd, name, image, value, width, finish, height } = objectRef();
+
+    qtd.value = "";
+    name.value = "";
+    image.value = "";
+    value.value = "";
+    width.value = "";
+    finish.value = "";
+    height.value = "";
+  };
+
+  const handlerButtonClick = () => {
+    if (objectValues()) {
+      const {
+        qtd,
+        _id,
+        area,
+        name,
+        image,
+        value,
+        total,
+        width,
+        height,
+        finish,
+      } = objectValues() as IProduct;
+
+      const newProduct: IProduct = {
+        qtd,
+        _id,
+        area,
+        name,
+        image,
+        value,
+        total,
+        width,
+        height,
+        finish,
       };
 
       setProducts([...products, newProduct]);
 
-      qtd.value = "";
-      name.value = "";
-      image.value = "";
-      price.value = "";
-      area.value = "";
+      objectChange();
+      toast.success("Produto adicionado ao atual orçamento");
     } else {
-      console.log("please set all boxies");
+      toast.error("Preencha todos os campos do produto", errorStyle);
     }
+  };
+
+  const inputChangeHandler = (e: React.ChangeEvent) => {
+    const obj = e.currentTarget as HTMLInputElement;
+    obj.value = obj.value.trim().replace(/[^\d.,]/g, "");
   };
 
   useEffect(() => {
@@ -88,8 +168,9 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
           <div>
             <THead>
               <TableTh>Image</TableTh>
-              <TableTh>Nome</TableTh>
-              <TableTh>Area (m²)</TableTh>
+              <TableTh>Descricao</TableTh>
+              <TableTh>Medidas</TableTh>
+              <TableTh>m²</TableTh>
               <TableTh>QTD</TableTh>
               <TableTh>Preço Unit.</TableTh>
               <TableTh>Total</TableTh>
@@ -97,13 +178,8 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
             <TBody>
               {products.map((product: IProduct) => (
                 <BudgetAddProductField
-                  id={product._id}
                   key={product._id}
-                  qtd={product.qtd}
-                  name={product.name}
-                  area={product.area}
-                  image={product.image}
-                  value={product.value}
+                  product={product}
                   handlerRemoveField={handlerRemoveField}
                 />
               ))}
@@ -121,16 +197,48 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
               <Input type="text" id="name" name="name" ref={nameRef} />
             </Field>
             <Field>
-              <Label htmlFor="area">Area (m²)</Label>
-              <Input type="text" id="area" name="area" ref={areaRef} />
+              <Label htmlFor="finish">Acabamento</Label>
+              <Input type="text" id="finish" name="finish" ref={finishRef} />
+            </Field>
+            <Field>
+              <Label htmlFor="width">Largura (m)</Label>
+              <Input
+                type="text"
+                id="width"
+                name="width"
+                ref={widthRef}
+                onChange={inputChangeHandler}
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="height">Altura (m)</Label>
+              <Input
+                type="text"
+                id="height"
+                name="height"
+                ref={heightRef}
+                onChange={inputChangeHandler}
+              />
             </Field>
             <Field>
               <Label htmlFor="qtd">QTD</Label>
-              <Input type="text" id="qtd" name="qtd" ref={qtdRef} />
+              <Input
+                type="text"
+                id="qtd"
+                name="qtd"
+                ref={qtdRef}
+                onChange={inputChangeHandler}
+              />
             </Field>
             <Field>
               <Label htmlFor="value">Preco UNIT.</Label>
-              <Input type="text" id="value" name="value" ref={valueRef} />
+              <Input
+                type="text"
+                id="value"
+                name="value"
+                ref={valueRef}
+                onChange={inputChangeHandler}
+              />
             </Field>
           </Fields>
           <Button type="button" onClick={handlerButtonClick}>
@@ -142,4 +250,4 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
   );
 };
 
-export default BudgetAddProduct;
+export default memo(BudgetAddProduct);

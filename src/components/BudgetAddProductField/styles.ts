@@ -42,16 +42,19 @@ export const ImageBox = styled.div`
   }
 `;
 
-export const TableTd = styled.td`
+export const TableTd = styled.div`
   text-align: center;
+  word-wrap: break-word;
+  word-break: break-word;
 
+  font-size: 12px;
   width: 120px;
   font-weight: 600;
 
   color: white;
 `;
 
-export const TableTdRemove = styled.td`
+export const TableTdRemove = styled.div`
   display: none;
 
   position: absolute;

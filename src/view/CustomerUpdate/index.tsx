@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserTie } from "@fortawesome/free-solid-svg-icons";
 
 import api from "../../service/http";
 import NavBar from "../../components/NavBar";
+import ICustomer from "../../interfaces/ICustomer";
 import HeaderTop from "../../components/HeaderTop";
 import CustomerFormUpdate from "../../components/CustomerFormUpdate";
 import { Container, Content, TopSection, Top, Title, Bottom } from "./styles";
@@ -13,23 +15,9 @@ interface Params {
   id: string;
 }
 
-interface Customer {
-  _id: string;
-  name: string;
-  phoneNumber: string;
-  address: string;
-  city: string;
-  state: string;
-  neighbor: string;
-  cep: string;
-  email: string;
-  cnpj: string;
-  cpf: string;
-}
-
 const CustomerUpdate: React.FC = () => {
   const { id } = useParams<Params>();
-  const [customer, setcustomer] = useState<Customer>({
+  const [customer, setcustomer] = useState<ICustomer>({
     _id: "",
     name: "",
     phoneNumber: "",
@@ -73,6 +61,17 @@ const CustomerUpdate: React.FC = () => {
           </Bottom>
         </TopSection>
         <CustomerFormUpdate customer={customer} />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </Content>
     </Container>
   );

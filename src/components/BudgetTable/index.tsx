@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 import api from "../../service/http";
 import IBudget from "../../interfaces/IBudget";
 import BudgetTableCell from "../BudgetTableCell";
+import { successStyle, errorStyle } from "../Notifications";
 import { Container, Table, THeader, TBody, Field } from "./styles";
 
 const BudgetTable: React.FC = () => {
@@ -138,9 +140,13 @@ const BudgetTable: React.FC = () => {
       })
       .then((res) => {
         setbudgets(res.data.budgets);
+        toast.success("Orçamento deletado com sucesso", successStyle);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        toast.error(
+          "Não foi possivel deletar o Orçamento, tente novamente mais tarde",
+          errorStyle
+        );
       });
   };
 
@@ -150,8 +156,11 @@ const BudgetTable: React.FC = () => {
       .then((res) => {
         setbudgets(res.data.budgets);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        toast.error(
+          "Houve um erro ao carregar os orçamentos, tente novamente mais tarde",
+          errorStyle
+        );
       });
   }, []);
 
@@ -191,11 +200,18 @@ const BudgetTable: React.FC = () => {
             <FontAwesomeIcon icon={faChevronUp} />
             <span>Criacao</span>
           </Field>
+          <Field className="tableHeaderField" onClick={handlerFieldClick}>
+            <FontAwesomeIcon icon={faChevronUp} />
+            <span>Pago</span>
+          </Field>
           <Field>
             <span>Orçamento</span>
           </Field>
           <Field>
             <span>Guia</span>
+          </Field>
+          <Field>
+            <span>Editar</span>
           </Field>
           <Field>
             <span>Excluir</span>

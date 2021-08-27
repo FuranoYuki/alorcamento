@@ -14,6 +14,7 @@ import NavBar from "../../components/NavBar";
 import PDFGuia from "../../components/PDFGuia";
 import HeaderTop from "../../components/HeaderTop";
 import PDFDownload from "../../components/PDFDownload";
+import ModalDownload from "../../components/ModalDownload";
 import BudgetAddProduct from "../../components/BudgetAddProduct";
 import BudgetAddAddress from "../../components/BudgetAddAddress";
 import BudgetAddCustomer from "../../components/BudgetAddCustomer";
@@ -26,6 +27,7 @@ import {
   ClientIcon,
   Buttons,
   ButtonCreate,
+  ButtonDownload,
   ButtonPreview,
   PDFPreView,
   Content,
@@ -34,6 +36,9 @@ import {
 const BudgetCreate: React.FC = () => {
   const history = useHistory();
   const pdfBoxRef = useRef<HTMLDivElement>(null);
+  const [modal, setmodal] = useState(false);
+  const [blob, setblob] = useState("");
+  const [preview, setpreview] = useState(false);
   const [customer, setcustomer] = useState<ICustomer>({});
   const [products, setproducts] = useState<IProduct[]>([]);
   const [sendingAddress, setsendingAddress] = useState<ISendingAddress>({});
@@ -51,16 +56,33 @@ const BudgetCreate: React.FC = () => {
   };
 
   const handlerButtonCreateClick = async () => {
+    toast.dark("Criando orçamento...", successStyle);
+
+    const dateNow = new Date();
+    const formatedDate = `${dateNow.getDate()}/${
+      dateNow.getMonth() + 1
+    }/${dateNow.getFullYear()}`;
+
+    const address = `${sendingAddress.address} ${sendingAddress.complement}`;
+
     const blobBudget = await pdf(
       <PDFDownload
         products={products}
         customer={customer}
         sendingAddress={sendingAddress}
+        date={formatedDate}
+        address={address}
       />
     ).toBlob();
 
     const blobGuia = await pdf(
-      <PDFGuia products={products} customer={customer} />
+      <PDFGuia
+        products={products}
+        customer={customer}
+        sendingAddress={sendingAddress}
+        date={formatedDate}
+        address={address}
+      />
     ).toBlob();
 
     const budgetPdfFile = new File([blobBudget], "alorcamento", {
@@ -85,21 +107,41 @@ const BudgetCreate: React.FC = () => {
       data: budget,
       method: "POST",
       url: "/alorcamentos/budget/create",
+      onUploadProgress: (event) => {
+        const progress: number = Math.round((event.loaded * 100) / event.total);
+
+        toast.info("Cadastrando orçamento...", {
+          ...successStyle,
+          progress,
+        });
+      },
     })
       .then(() => {
-        toast.success("Orcamento cadastrado", successStyle);
+        toast.success("Orçamento cadastrado", successStyle);
         setTimeout(() => {
           history.push("/budget");
         }, 2500);
       })
       .catch(() => {
-        toast.error("Falha ao cadastrar orcamento", errorStyle);
+        toast.error("Falha ao cadastrar orçamento", errorStyle);
       });
   };
 
   const handlerButtonPreviewClick = () => {
     const pdf = pdfBoxRef.current as HTMLDivElement;
     pdf.style.display = pdf.style.display == "flex" ? "none" : "flex";
+
+    setpreview(!preview);
+  };
+
+  const handlerDownloadClick = () => {
+    const blobUrl = document.getElementsByTagName("iframe")[0].src;
+    setblob(blobUrl);
+    handlerModalShow();
+  };
+
+  const handlerModalShow = () => {
+    setmodal(!modal);
   };
 
   return (
@@ -130,22 +172,33 @@ const BudgetCreate: React.FC = () => {
           <ButtonCreate onClick={handlerButtonCreateClick} type="button">
             Criar Orçamento
           </ButtonCreate>
+          <ButtonDownload onClick={handlerDownloadClick}>
+            Download
+          </ButtonDownload>
           <ButtonPreview onClick={handlerButtonPreviewClick} type="button">
             Preview
           </ButtonPreview>
         </Buttons>
         <PDFPreView ref={pdfBoxRef}>
-          <PDFViewer>
-            <PDFDownload
-              products={products}
-              customer={customer}
-              sendingAddress={sendingAddress}
-            />
-          </PDFViewer>
+          {preview && (
+            <PDFViewer>
+              <PDFDownload
+                products={products}
+                customer={customer}
+                sendingAddress={sendingAddress}
+              />
+            </PDFViewer>
+          )}
         </PDFPreView>
       </Content>
+      {modal && (
+        <ModalDownload
+          blob={blob}
+          handlerDownloadClick={handlerDownloadClick}
+        />
+      )}
       <ToastContainer
-        position="bottom-right"
+        position="top-right"
         autoClose={3000}
         hideProgressBar
         newestOnTop={false}

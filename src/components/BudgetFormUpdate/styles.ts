@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
+  height: 100%;
   padding: 40px 20px;
 
   background-color: var(--white-color);
@@ -93,6 +94,10 @@ export const Input = styled.input`
 
   &:focus {
     outline: none;
+  }
+
+  &:hover {
+    cursor: pointer;
   }
 
   &:disabled {

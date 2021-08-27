@@ -23,12 +23,12 @@ export const Td = styled.div`
   text-align: center;
 
   > a {
-    font-size: 16px;
+    font-size: 20px;
     color: white;
 
     &:hover {
       cursor: pointer;
-      color: var(--green-color);
+      color: var(--pink-color);
     }
   }
 `;
@@ -38,16 +38,36 @@ export const TdRemove = styled.div`
   justify-content: center;
   word-break: break-all;
 
-  padding: 10px 5px;
+  padding: 0 5px;
   min-width: 110px;
   width: 110px;
-  font-size: 13px;
+  font-size: 20px;
   font-weight: 600;
 
   > svg {
     &:hover {
       cursor: pointer;
       color: var(--salmon-color);
+    }
+  }
+`;
+
+export const TdEdit = styled.div`
+  display: flex;
+  justify-content: center;
+  word-break: break-all;
+
+  padding: 0 5px;
+  min-width: 110px;
+  width: 110px;
+  font-size: 20px;
+  font-weight: 600;
+
+  > a {
+    color: white;
+    &:hover {
+      cursor: pointer;
+      color: var(--green-color);
     }
   }
 `;

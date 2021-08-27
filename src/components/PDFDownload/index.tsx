@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Page,
   Text,
@@ -16,6 +16,8 @@ interface Props {
   customer: ICustomer;
   products: IProduct[];
   sendingAddress: ISendingAddress;
+  date?: string;
+  address?: string;
 }
 
 const styles = StyleSheet.create({
@@ -157,9 +159,9 @@ const styles = StyleSheet.create({
   productInfoHeader: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
 
-    padding: 5,
+    padding: 3,
     borderLeft: 1,
     borderRight: 1,
     borderColor: "black",
@@ -170,19 +172,27 @@ const styles = StyleSheet.create({
   imageHeader: {
     textAlign: "center",
 
-    width: 130,
+    width: 110,
     fontSize: 10,
 
     color: "white",
   },
   nameHeader: {
     display: "flex",
-    flexGrow: 1,
     alignItems: "center",
 
+    width: 85,
     fontSize: 10,
-    paddingLeft: 6,
-    paddingRight: 6,
+    paddingLeft: 4,
+    paddingRight: 4,
+
+    color: "white",
+  },
+  medidasHeader: {
+    textAlign: "center",
+
+    width: 75,
+    fontSize: 10,
 
     color: "white",
   },
@@ -197,7 +207,7 @@ const styles = StyleSheet.create({
   valueHeader: {
     textAlign: "center",
 
-    width: 75,
+    width: 65,
     fontSize: 10,
 
     color: "white",
@@ -215,7 +225,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
 
-    padding: 5,
+    padding: 3,
     borderLeft: 1,
     borderRight: 1,
     borderBottom: 1,
@@ -225,17 +235,35 @@ const styles = StyleSheet.create({
   imageRow: {
     textAlign: "center",
 
-    width: 130,
+    width: 110,
+    height: 90,
     maxHeight: 90,
   },
   nameRow: {
     display: "flex",
     alignItems: "center",
-    flexGrow: 1,
+    justifyContent: "center",
+    flexDirection: "column",
 
-    fontSize: 11,
-    paddingLeft: 6,
-    paddingRight: 6,
+    width: 85,
+    fontSize: 10,
+    paddingLeft: 4,
+    paddingRight: 4,
+
+    color: "black",
+  },
+  name: {
+    textAlign: "center",
+  },
+  finish: {
+    marginTop: 10,
+    textAlign: "center",
+  },
+  medidasRow: {
+    textAlign: "center",
+
+    width: 75,
+    fontSize: 10,
 
     color: "black",
   },
@@ -243,15 +271,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
 
     width: 65,
-    fontSize: 11,
+    fontSize: 10,
 
     color: "black",
   },
   valueRow: {
     textAlign: "center",
 
-    width: 75,
-    fontSize: 11,
+    width: 65,
+    fontSize: 10,
 
     color: "black",
   },
@@ -259,7 +287,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
 
     width: 75,
-    fontSize: 11,
+    fontSize: 10,
 
     color: "black",
   },
@@ -306,9 +334,29 @@ const styles = StyleSheet.create({
 
     color: "black",
   },
+  complement: {
+    marginLeft: 5,
+  },
 });
 
 const PDFDownload: React.FC<Props> = (Props) => {
+  const [address, setaddress] = useState("");
+  const [date, setdate] = useState("");
+
+  useEffect(() => {
+    const dateNow = new Date();
+    const formatedDate = `${dateNow.getDate()}/${
+      dateNow.getMonth() + 1
+    }/${dateNow.getFullYear()}`;
+    setdate(formatedDate);
+  }, []);
+
+  useEffect(() => {
+    setaddress(
+      `${Props.sendingAddress.address}  ${Props.sendingAddress.complement}`
+    );
+  }, [Props.sendingAddress]);
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -337,7 +385,7 @@ const PDFDownload: React.FC<Props> = (Props) => {
             </View>
             <View style={styles.HeaderRight}>
               <Text>Data de Criacao</Text>
-              <Text>10/08/2021</Text>
+              <Text>{Props.date ? Props.date : date}</Text>
             </View>
           </View>
           <View style={styles.title}>
@@ -350,8 +398,8 @@ const PDFDownload: React.FC<Props> = (Props) => {
                 <Text style={styles.input}>{Props.customer.name}</Text>
               </View>
               <View style={styles.infoLongFieldVendedor}>
-                <Text style={styles.label}>Vendedor:</Text>
-                <Text style={styles.input}>Alopapers</Text>
+                <Text style={styles.label}>Email:</Text>
+                <Text style={styles.input}>{Props.customer.email}</Text>
               </View>
             </View>
             <View style={styles.customerInfoRow}>
@@ -364,8 +412,8 @@ const PDFDownload: React.FC<Props> = (Props) => {
                 <Text style={styles.input}>{Props.customer.cnpj}</Text>
               </View>
               <View style={styles.infoLongFieldVendedor}>
-                <Text style={styles.label}>E-mail:</Text>
-                <Text style={styles.input}>{Props.customer.email}</Text>
+                <Text style={styles.label}>CPF:</Text>
+                <Text style={styles.input}>{Props.customer.cpf}</Text>
               </View>
             </View>
             <View style={styles.customerInfoRow}>
@@ -401,8 +449,7 @@ const PDFDownload: React.FC<Props> = (Props) => {
               <View style={styles.infoLongFieldName}>
                 <Text style={styles.label}>Endereço:</Text>
                 <Text style={styles.input}>
-                  {Props.sendingAddress.address}
-                  {Props.sendingAddress.complement}
+                  {Props.address ? Props.address : address}
                 </Text>
               </View>
               <View style={styles.infoLongFieldVendedor}>
@@ -434,19 +481,22 @@ const PDFDownload: React.FC<Props> = (Props) => {
               <Text>Imagem</Text>
             </View>
             <View style={styles.nameHeader}>
-              <Text>Nome</Text>
+              <Text>Descrição</Text>
+            </View>
+            <View style={styles.medidasHeader}>
+              <Text>Medidas</Text>
             </View>
             <View style={styles.qtdHeader}>
-              <Text>Area (m²)</Text>
+              <Text>Area</Text>
             </View>
             <View style={styles.qtdHeader}>
               <Text>QTD</Text>
             </View>
             <View style={styles.valueHeader}>
-              <Text>PRECO UNIT.</Text>
+              <Text>Preço Unit.</Text>
             </View>
             <View style={styles.totalHeader}>
-              <Text>TOTAL</Text>
+              <Text>Total</Text>
             </View>
           </View>
           {Props.products.map((product) => (
@@ -455,7 +505,15 @@ const PDFDownload: React.FC<Props> = (Props) => {
                 <Image src={product.image} />
               </View>
               <View style={styles.nameRow}>
-                <Text>{product.name}</Text>
+                <Text style={styles.name}>{product.name}</Text>
+                <Text style={styles.finish}>
+                  acabamento de {product.finish}
+                </Text>
+              </View>
+              <View style={styles.medidasRow}>
+                <Text>
+                  {product.width}m x {product.height}m
+                </Text>
               </View>
               <View style={styles.qtdRow}>
                 <Text>{product.area}m²</Text>
@@ -464,14 +522,10 @@ const PDFDownload: React.FC<Props> = (Props) => {
                 <Text>{product.qtd}</Text>
               </View>
               <View style={styles.valueRow}>
-                <Text>{product.value}</Text>
+                <Text>R${product.value}</Text>
               </View>
               <View style={styles.totalRow}>
-                <Text>
-                  {Number(
-                    (Number(product.qtd) * Number(product.value)).toFixed(3)
-                  )}
-                </Text>
+                <Text>R${product.total}</Text>
               </View>
             </View>
           ))}
@@ -484,7 +538,7 @@ const PDFDownload: React.FC<Props> = (Props) => {
                 R$
                 {Props.products
                   .reduce((a, b) => Number(a) + Number(b.total), 0)
-                  .toFixed(1)}
+                  .toFixed(2)}
               </Text>
             </View>
           </View>

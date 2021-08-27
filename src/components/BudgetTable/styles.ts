@@ -12,7 +12,7 @@ export const Table = styled.div`
   justify-content: center;
   gap: 20px 0;
 
-  width: 1210px;
+  width: 1430px;
   margin: 0 auto;
 `;
 

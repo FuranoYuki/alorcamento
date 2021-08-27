@@ -1,10 +1,11 @@
 import React, { useRef } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import api from "../../service/http";
 import "react-toastify/dist/ReactToastify.css";
+import { formatCPF, formatCNPJ, formatPhone } from "../FormatInput";
 import { successStyle, errorStyle } from "../Notifications";
 import {
   Container,
@@ -150,6 +151,21 @@ const CustomerFormCreate: React.FC = () => {
     history.goBack();
   };
 
+  const handlerInputChange = (e: React.ChangeEvent) => {
+    const obj = e.currentTarget as HTMLInputElement;
+    if (obj.id === "cpf") {
+      obj.value = formatCPF(obj.value);
+    }
+
+    if (obj.id === "cnpj") {
+      obj.value = formatCNPJ(obj.value);
+    }
+
+    if (obj.id === "phoneNumber") {
+      obj.value = formatPhone(obj.value);
+    }
+  };
+
   const handlerCEPBlur = (e: React.FocusEvent) => {
     const obj = e.currentTarget as HTMLInputElement;
     axios
@@ -164,6 +180,12 @@ const CustomerFormCreate: React.FC = () => {
         city.value = res.data.localidade;
         neighbor.value = res.data.bairro;
         address.value = res.data.logradouro;
+
+        const option = document.getElementById(
+          `${res.data.uf}`
+        ) as HTMLOptionElement;
+
+        option.selected = true;
 
         toast.success("CEP encontrado", successStyle);
       })
@@ -196,7 +218,12 @@ const CustomerFormCreate: React.FC = () => {
               <span ref={cpfWarningRef}>CPF já cadastrado</span>
               <span ref={cpfEmptyRef}>CPF possui no mínimo 11 algarismos</span>
             </Header>
-            <Input id="cpf" name="cpf" ref={cpfRef} />
+            <Input
+              id="cpf"
+              name="cpf"
+              ref={cpfRef}
+              onChange={handlerInputChange}
+            />
           </Field>
           <Field>
             <Header>
@@ -219,33 +246,87 @@ const CustomerFormCreate: React.FC = () => {
             </Header>
             <Select id="state" name="state" ref={stateRef}>
               <option value=""></option>
-              <option value="AC">AC</option>
-              <option value="AL">AL</option>
-              <option value="AP">AP</option>
-              <option value="AM">AM</option>
-              <option value="BA">BA</option>
-              <option value="CE">CE</option>
-              <option value="DF">DF</option>
-              <option value="ES">ES</option>
-              <option value="GO">GO</option>
-              <option value="MA">MA</option>
-              <option value="MT">MT</option>
-              <option value="MS">MS</option>
-              <option value="MG">MG</option>
-              <option value="PA">PA</option>
-              <option value="PB">PB</option>
-              <option value="PR">PR</option>
-              <option value="PE">PE</option>
-              <option value="PI">PI</option>
-              <option value="RJ">RJ</option>
-              <option value="RN">RN</option>
-              <option value="RD">RD</option>
-              <option value="RO">RO</option>
-              <option value="RR">RR</option>
-              <option value="SC">SC</option>
-              <option value="SP">SP</option>
-              <option value="SE">SE</option>
-              <option value="TO">TO</option>
+              <option value="AC" id="AC">
+                AC
+              </option>
+              <option value="AL" id="AL">
+                AL
+              </option>
+              <option value="AP" id="AP">
+                AP
+              </option>
+              <option value="AM" id="AM">
+                AM
+              </option>
+              <option value="BA" id="BA">
+                BA
+              </option>
+              <option value="CE" id="CE">
+                CE
+              </option>
+              <option value="DF" id="DF">
+                DF
+              </option>
+              <option value="ES" id="ES">
+                ES
+              </option>
+              <option value="GO" id="GO">
+                GO
+              </option>
+              <option value="MA" id="MA">
+                MA
+              </option>
+              <option value="MT" id="MT">
+                MT
+              </option>
+              <option value="MS" id="MS">
+                MS
+              </option>
+              <option value="MG" id="MG">
+                MG
+              </option>
+              <option value="PA" id="PA">
+                PA
+              </option>
+              <option value="PB" id="PB">
+                PB
+              </option>
+              <option value="PR" id="PR">
+                PR
+              </option>
+              <option value="PE" id="PE">
+                PE
+              </option>
+              <option value="PI" id="PI">
+                PI
+              </option>
+              <option value="RJ" id="RJ">
+                RJ
+              </option>
+              <option value="RN" id="RN">
+                RN
+              </option>
+              <option value="RD" id="RD">
+                RD
+              </option>
+              <option value="RO" id="RO">
+                RO
+              </option>
+              <option value="RR" id="RR">
+                RR
+              </option>
+              <option value="SC" id="SC">
+                SC
+              </option>
+              <option value="SP" id="SP">
+                SP
+              </option>
+              <option value="SE" id="SE">
+                SE
+              </option>
+              <option value="TO" id="TO">
+                TO
+              </option>
             </Select>
           </Field>
           <Field>
@@ -270,14 +351,24 @@ const CustomerFormCreate: React.FC = () => {
                 CNPJ deve ter no minimo 14 algarismo
               </span>
             </Header>
-            <Input id="cnpj" name="cnpj" ref={cnpjRef} />
+            <Input
+              id="cnpj"
+              name="cnpj"
+              ref={cnpjRef}
+              onChange={handlerInputChange}
+            />
           </Field>
           <Field>
             <Header>
               <Label htmlFor="phoneNumber">Telefone</Label>
               <span>Error</span>
             </Header>
-            <Input id="phoneNumber" name="phoneNumber" ref={phoneNumberRef} />
+            <Input
+              id="phoneNumber"
+              name="phoneNumber"
+              ref={phoneNumberRef}
+              onChange={handlerInputChange}
+            />
           </Field>
         </Inputs>
         <Buttons>
@@ -286,17 +377,6 @@ const CustomerFormCreate: React.FC = () => {
           </ButtonBack>
           <Button type="submit">Cadastrar</Button>
         </Buttons>
-        <ToastContainer
-          position="bottom-right"
-          autoClose={3000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
       </Form>
     </Container>
   );
