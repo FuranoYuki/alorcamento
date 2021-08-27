@@ -107,13 +107,8 @@ const BudgetCreate: React.FC = () => {
       data: budget,
       method: "POST",
       url: "/alorcamentos/budget/create",
-      onUploadProgress: (event) => {
-        const progress: number = Math.round((event.loaded * 100) / event.total);
-
-        toast.info("Cadastrando orçamento...", {
-          ...successStyle,
-          progress,
-        });
+      onUploadProgress: () => {
+        toast.info("Cadastrando orçamento...", successStyle);
       },
     })
       .then(() => {
