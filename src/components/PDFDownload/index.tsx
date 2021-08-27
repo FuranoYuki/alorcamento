@@ -405,7 +405,7 @@ const PDFDownload: React.FC<Props> = (Props) => {
             <View style={styles.customerInfoRow}>
               <View style={styles.infoShortFieldMid}>
                 <Text style={styles.label}>Telefone:</Text>
-                <Text style={styles.input}></Text>
+                <Text style={styles.input}>{Props.customer.phoneNumber}</Text>
               </View>
               <View style={styles.infoShortFieldMid}>
                 <Text style={styles.label}>CNPJ:</Text>

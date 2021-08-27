@@ -142,6 +142,7 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
         warningExist.style.display = "none";
         const customerData = res.data.customer;
 
+        const cpf = cpfRef.current as HTMLInputElement;
         const cep = cepRef.current as HTMLInputElement;
         const name = nameRef.current as HTMLInputElement;
         const city = cityRef.current as HTMLInputElement;
@@ -153,6 +154,7 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
         const phoneNumber = phoneNumberRef.current as HTMLInputElement;
 
         cep.value = customerData.cep;
+        cpf.value = customerData.cpf;
         cnpj.value = customerData.cnpj;
         name.value = customerData.name;
         city.value = customerData.city;
