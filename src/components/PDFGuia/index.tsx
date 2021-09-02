@@ -232,6 +232,9 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
   },
   imageRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     textAlign: "center",
 
     width: 110,

@@ -12,7 +12,7 @@ export const Table = styled.div`
   justify-content: center;
   gap: 20px 0;
 
-  width: 660px;
+  width: 625px;
   margin: 0 auto;
 `;
 
@@ -27,8 +27,8 @@ export const Field = styled.div`
   justify-content: center;
   gap: 0 5px;
 
-  width: 110px;
-  min-width: 110px;
+  width: 125px;
+  min-width: 125px;
   padding: 5px;
   font-weight: 600;
 

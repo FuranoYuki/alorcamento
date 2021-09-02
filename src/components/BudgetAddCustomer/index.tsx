@@ -1,6 +1,7 @@
 import React, { useRef, memo } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 
 import api from "../../service/http";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,12 +25,16 @@ import {
   Warning,
   CodeInput,
 } from "./styles";
+import { login, logout } from "../../service/token";
+import refreshToken from "../../functions/refreshToken";
 
 interface Props {
   handlerCustomer: (cust: ICustomer) => void;
 }
 
 const BudgetAddCustomer: React.FC<Props> = (Props) => {
+  const history = useHistory();
+
   const cpfRef = useRef<HTMLInputElement>(null);
   const cepRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
@@ -166,9 +171,20 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
 
         handlerInputBlur();
       })
-      .catch((error) => {
+      .catch(async (error) => {
         if (error.response.data.customerDoesExist) {
           warningExist.style.display = "flex";
+        }
+        if (error.response.data.tokenExpired) {
+          const newToken = await refreshToken();
+
+          if (newToken != "failedRefresh") {
+            login(newToken);
+            history.push("/budget");
+          } else {
+            logout();
+            history.push("/login");
+          }
         }
       });
   };

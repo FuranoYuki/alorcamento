@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 export const actions = {
   NAVBAR: "NAVBAR",
+  PRODUCTSELECT: "PRODUCTSELECT",
 };
 
 interface Return {
@@ -9,4 +10,8 @@ interface Return {
 
 export function navbar(): Return {
   return { type: actions.NAVBAR };
+}
+
+export function productSelect(): Return {
+  return { type: actions.PRODUCTSELECT };
 }

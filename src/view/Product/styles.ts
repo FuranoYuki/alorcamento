@@ -76,7 +76,8 @@ export const Buttons = styled.div`
 `;
 
 const ButtonCss = css`
-  padding: 10px 20px;
+  display: flex;
+
   font-size: 16px;
   font-weight: 600;
   border-radius: 5px;
@@ -99,12 +100,9 @@ export const Cadastrar = styled.button`
   }
 
   > a {
+    padding: 10px 20px;
+
     color: inherit;
     text-decoration: none;
   }
-`;
-
-export const Imprimir = styled.button`
-  ${ButtonCss}
-  background-color: var(--light-blue);
 `;

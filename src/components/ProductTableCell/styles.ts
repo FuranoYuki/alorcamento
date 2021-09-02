@@ -16,13 +16,15 @@ export const Td = styled.div`
   word-break: break-all;
 
   padding: 10px 5px;
-  min-width: 110px;
-  width: 110px;
+  min-width: 125px;
+  width: 125px;
   font-size: 13px;
   font-weight: 600;
+  text-align: center;
+  word-break: keep-all;
 
   > a {
-    font-size: 16px;
+    font-size: 20px;
     color: white;
 
     &:hover {
@@ -40,7 +42,7 @@ export const TdRemove = styled.div`
   padding: 10px 5px;
   min-width: 110px;
   width: 110px;
-  font-size: 13px;
+  font-size: 20px;
   font-weight: 600;
 
   > svg {

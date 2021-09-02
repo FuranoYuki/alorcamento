@@ -57,7 +57,7 @@ const CustomerUpdate: React.FC = () => {
             <span> &gt; </span>
             <Link to="/customer">Clientes</Link>
             <span> &gt; </span>
-            <Link to="/customer/update">Atualizar</Link>
+            <Link to="#">Atualizar Cliente</Link>
           </Bottom>
         </TopSection>
         <CustomerFormUpdate customer={customer} />

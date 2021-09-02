@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import api from "../../service/http";
 import { successStyle, errorStyle } from "../Notifications";
@@ -17,7 +17,15 @@ import {
   ButtonBack,
 } from "./styles";
 
-const ProductFormCreate: React.FC = () => {
+interface Params {
+  id: string;
+}
+
+const ProductFormUpdate: React.FC = () => {
+  const history = useHistory();
+
+  const { id } = useParams<Params>();
+
   const nameRef = useRef<HTMLInputElement>(null);
   const valueRef = useRef<HTMLInputElement>(null);
   const finishRef = useRef<HTMLInputElement>(null);
@@ -25,8 +33,6 @@ const ProductFormCreate: React.FC = () => {
   const nameWarningRef = useRef<HTMLSpanElement>(null);
   const valueWarningRef = useRef<HTMLSpanElement>(null);
   const finishWarningRef = useRef<HTMLSpanElement>(null);
-
-  const history = useHistory();
 
   const inputChangeHandler = (e: React.ChangeEvent) => {
     const obj = e.currentTarget as HTMLInputElement;
@@ -84,19 +90,20 @@ const ProductFormCreate: React.FC = () => {
       toast.info("Fazendo o cadastro de produto..", successStyle);
 
       api
-        .post("/alorcamentos/product/create", {
+        .post("/alorcamentos/product/update", {
+          id,
           name: name.value.toLowerCase().trim(),
           finish: finish.value.trim(),
           value: price.value.toLowerCase().trim(),
         })
         .then((res) => {
           if (res.data.productCreate) {
-            toast.success("Produto cadastro com sucesso", successStyle);
+            toast.success("Produto atualizado com sucesso", successStyle);
           }
         })
         .catch(() => {
           toast.error(
-            "Erro ao cadastrar o produto, tente novamente mais tarde",
+            "Erro ao atualizar o produto, tente novamente mais tarde",
             errorStyle
           );
         });
@@ -108,6 +115,33 @@ const ProductFormCreate: React.FC = () => {
       toast.error("Preencha todos os campos para fazer o cadastro", errorStyle);
     }
   };
+
+  const getProduct = () => {
+    api
+      .post("/alorcamentos/product/findOne", {
+        id,
+      })
+      .then((res) => {
+        const { name, price, finish } = getCurrent();
+
+        name.value = res.data.product.name;
+        price.value = res.data.product.value;
+        finish.value = res.data.product.finish;
+      })
+      .catch(() => {
+        toast.error(
+          "Erro ao carregar o produto, tente novamente mais tarde",
+          errorStyle
+        );
+        setTimeout(() => {
+          history.push("/product");
+        }, 2000);
+      });
+  };
+
+  useEffect(() => {
+    getProduct();
+  }, []);
 
   return (
     <Container>
@@ -144,11 +178,11 @@ const ProductFormCreate: React.FC = () => {
           <ButtonBack type="button" onClick={handlerBackClick}>
             Voltar
           </ButtonBack>
-          <Button type="submit">Cadastrar</Button>
+          <Button type="submit">Atualizar</Button>
         </Buttons>
       </Form>
     </Container>
   );
 };
 
-export default ProductFormCreate;
+export default ProductFormUpdate;

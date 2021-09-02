@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Container = styled.div`
   border-top: 1px solid var(--border-bottom);
@@ -124,8 +124,15 @@ export const Input = styled.input`
   }
 `;
 
-export const Button = styled.button`
-  margin: auto;
+export const Buttons = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+`;
+
+const buttonCss = css`
   width: 180px;
   padding: 15px;
   font-size: 14px;
@@ -145,4 +152,12 @@ export const Button = styled.button`
   &:disabled {
     cursor: not-allowed;
   }
+`;
+
+export const ButtonSearch = styled.button`
+  ${buttonCss}
+`;
+
+export const Button = styled.button`
+  ${buttonCss}
 `;

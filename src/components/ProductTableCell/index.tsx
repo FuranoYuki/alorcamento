@@ -1,27 +1,42 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 import { Container, Td, TdRemove } from "./styles";
 
-const ProductTableCell: React.FC = () => {
+interface Product {
+  _id: string;
+  name: string;
+  value: string;
+  finish: string;
+}
+
+interface Props {
+  product: Product;
+  handlerRemoveClick: (id: string) => void;
+}
+
+const ProductTableCell: React.FC<Props> = (Props) => {
+  const handlerRemoveClick = () => {
+    Props.handlerRemoveClick(Props.product._id);
+  };
+
   return (
     <Container>
-      <Td> código </Td>
-      <Td> nome </Td>
-      <Td> acabamento </Td>
-      <Td> valor </Td>
+      <Td> {Props.product.name} </Td>
+      <Td> {Props.product.finish} </Td>
+      <Td> R$ {Props.product.value} </Td>
       <Td>
-        <Link to={`/product`}>
+        <Link to={`/product/update/${Props.product._id}`}>
           <FontAwesomeIcon icon={faEdit} />
         </Link>
       </Td>
-      <TdRemove>
+      <TdRemove onClick={handlerRemoveClick}>
         <FontAwesomeIcon icon={faTrashAlt} />
       </TdRemove>
     </Container>
   );
 };
 
-export default ProductTableCell;
+export default memo(ProductTableCell);

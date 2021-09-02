@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ToastContainer } from "react-toastify";
 import { faPaste } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import NavBar from "../../components/NavBar";
 import HeaderTop from "../../components/HeaderTop";
@@ -24,11 +25,22 @@ const ProductCreate: React.FC = () => {
             <span> &gt; </span>
             <Link to="/product">Produtos</Link>
             <span> &gt; </span>
-            <Link to="/product/create">Cadastro</Link>
+            <Link to="#">Cadastrar Produto</Link>
           </Bottom>
         </TopSection>
         <ProductFormCreate />
       </Content>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Container>
   );
 };

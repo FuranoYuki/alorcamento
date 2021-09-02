@@ -148,14 +148,14 @@ const BudgetCreate: React.FC = () => {
           <Info>
             <Top>
               <ClientIcon icon={faCalculator} />
-              <h2>Criar Orçamento</h2>
+              <h2>Cadastrar Orçamento</h2>
             </Top>
             <Bottom>
               <Link to="/">Home</Link>
               <span> &gt; </span>
               <Link to="/budget">Orçamento</Link>
               <span> &gt; </span>
-              <Link to="/budget/create">Criar Orçamento</Link>
+              <Link to="#">Cadastrar Orçamento</Link>
             </Bottom>
           </Info>
           <Buttons></Buttons>

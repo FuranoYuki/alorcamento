@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 import IProduct from "../../interfaces/IProduct";
 import { errorStyle } from "../Notifications";
+import BudgetSelectProduct from "../BudgetSelectProduct";
 import BudgetAddProductField from "../BudgetAddProductField";
 import {
   Container,
@@ -17,8 +18,17 @@ import {
   Field,
   Label,
   Input,
+  Buttons,
   Button,
+  ButtonSearch,
 } from "./styles";
+
+interface Product {
+  _id?: string;
+  name: string;
+  value: string;
+  finish: string;
+}
 
 interface Props {
   handlerProcuts: (prod: IProduct[]) => void;
@@ -34,8 +44,8 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
   const finishRef = useRef<HTMLInputElement>(null);
   const heightRef = useRef<HTMLInputElement>(null);
 
-  // const totalRef = useRef<HTMLInputElement>(null);
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [modal, setmodal] = useState(false);
 
   const handlerRemoveField = (e: React.MouseEvent) => {
     const remove = e.currentTarget.parentNode as HTMLDivElement;
@@ -156,6 +166,42 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
     obj.value = obj.value.trim().replace(/[^\d.,]/g, "");
   };
 
+  const handlerBlurInput = () => {
+    const width = widthRef.current as HTMLInputElement;
+    width.value = width.value.replace(",", ".").trim();
+    const infos = width.value.split(".");
+    if (
+      Number(infos[1]) / 5 !== 1 &&
+      Number(infos[1]) !== 0 &&
+      infos[1] !== undefined
+    ) {
+      if (Number(infos[1]) < 5) {
+        infos[1] = ".5";
+      } else {
+        infos[0] = String(Number(infos[0]) + 1);
+        infos[1] = "";
+      }
+    }
+    const newWidth = infos.join("");
+    const qtdValue = Number(newWidth) / 0.5;
+
+    const qtd = qtdRef.current as HTMLInputElement;
+    qtd.value = String(qtdValue);
+  };
+
+  const handlerSearchClick = () => {
+    setmodal(!modal);
+  };
+
+  const handlerSelected = (data: Product) => {
+    const { name, finish, value } = objectRef();
+    name.value = data.name;
+    value.value = data.value;
+    finish.value = data.finish;
+
+    handlerSearchClick();
+  };
+
   useEffect(() => {
     Props.handlerProcuts(products);
   }, [products]);
@@ -207,6 +253,7 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
                 id="width"
                 name="width"
                 ref={widthRef}
+                onBlur={handlerBlurInput}
                 onChange={inputChangeHandler}
               />
             </Field>
@@ -217,7 +264,7 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
                 id="height"
                 name="height"
                 ref={heightRef}
-                onChange={inputChangeHandler}
+                onBlur={handlerBlurInput}
               />
             </Field>
             <Field>
@@ -241,11 +288,22 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
               />
             </Field>
           </Fields>
-          <Button type="button" onClick={handlerButtonClick}>
-            Adicionar Produto
-          </Button>
+          <Buttons>
+            <ButtonSearch type="button" onClick={handlerSearchClick}>
+              Selecionar produto
+            </ButtonSearch>
+            <Button type="button" onClick={handlerButtonClick}>
+              Adicionar Produto
+            </Button>
+          </Buttons>
         </AddProducts>
       </Content>
+      {modal && (
+        <BudgetSelectProduct
+          handlerSelected={handlerSelected}
+          handlerSearchClick={handlerSearchClick}
+        />
+      )}
     </Container>
   );
 };

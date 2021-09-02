@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { toast, ToastContainer } from "react-toastify";
 
 import api from "../../service/http";
 import { successStyle, errorStyle } from "../Notifications";
 import { Container, Table, THeader, TBody, Field } from "./styles";
 import CustomerTableCell from "../CustomerTableCell";
+import { login, logout } from "../../service/token";
+import refreshToken from "../../functions/refreshToken";
 
 interface Customer {
   _id: string;
@@ -23,6 +26,7 @@ interface Customer {
 }
 
 const CustomerTable: React.FC = () => {
+  const history = useHistory();
   const [filterOrder, setfilterOrder] = useState(true);
   const [customers, setcustomers] = useState<Customer[]>([]);
 
@@ -192,15 +196,29 @@ const CustomerTable: React.FC = () => {
     }
   };
 
-  useEffect(() => {
+  const findAll = () => {
     api
       .post("/alorcamentos/customer/findAll")
       .then((res) => {
         setcustomers(res.data.customers);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(async (error) => {
+        if (error.response.data.tokenExpired) {
+          const newToken = await refreshToken();
+
+          if (newToken != "failedRefresh") {
+            login(newToken);
+            findAll();
+          } else {
+            logout();
+            history.push("/login");
+          }
+        }
       });
+  };
+
+  useEffect(() => {
+    findAll();
   }, []);
 
   return (

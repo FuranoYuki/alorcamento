@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { faPaste } from "@fortawesome/free-solid-svg-icons";
 
 import ProductContent from "../../components/ProductContent";
@@ -44,6 +45,17 @@ const Product: React.FC = () => {
         </TopSection>
         <ProductContent />
       </Content>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Container>
   );
 };

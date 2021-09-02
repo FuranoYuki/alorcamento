@@ -12,6 +12,7 @@ import CustomerUpdate from "./view/CustomerUpdate";
 
 import Product from "./view/Product";
 import ProductCreate from "./view/ProductCreate";
+import ProductUpdate from "./view/ProductUpdate";
 
 import Budget from "./view/Budget";
 import BudgetCreate from "./view/BudgetCreate";
@@ -55,6 +56,11 @@ const Routes = (): JSX.Element => (
 
       <PrivateRoute exact path="/product" component={Product} />
       <PrivateRoute exact path="/product/create" component={ProductCreate} />
+      <PrivateRoute
+        exact
+        path="/product/update/:id"
+        component={ProductUpdate}
+      />
 
       <PrivateRoute exact path="/budget/pdf/:type/:id" component={PDFView} />
     </Switch>

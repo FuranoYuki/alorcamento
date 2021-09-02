@@ -1,4 +1,4 @@
-export const TOKEN_KEY = "instagram-token";
+export const TOKEN_KEY = "alorcamento-token";
 
 export const isAuthenticated = (): boolean =>
   localStorage.getItem(TOKEN_KEY) !== null;

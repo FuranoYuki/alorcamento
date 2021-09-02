@@ -25,7 +25,7 @@ const CustomerCreate: React.FC = () => {
             <span> &gt; </span>
             <Link to="/customer">Clientes</Link>
             <span> &gt; </span>
-            <Link to="/customer/cadastro">Cadastro</Link>
+            <Link to="#">Cadastrar Cliente</Link>
           </Bottom>
         </TopSection>
         <CustomerFormCreate />

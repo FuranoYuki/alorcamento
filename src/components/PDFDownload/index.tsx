@@ -23,6 +23,7 @@ interface Props {
 const styles = StyleSheet.create({
   page: {
     backgroundColor: "#E4E4E4",
+    position: "relative",
   },
   body: {
     display: "flex",
@@ -233,11 +234,18 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
   },
   imageRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     textAlign: "center",
 
     width: 110,
     height: 90,
     maxHeight: 90,
+  },
+  productImage: {
+    objectFit: "none",
+    objectPosition: "center",
   },
   nameRow: {
     display: "flex",
@@ -336,6 +344,19 @@ const styles = StyleSheet.create({
   },
   complement: {
     marginLeft: 5,
+  },
+  footer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+
+    position: "absolute",
+    bottom: 0,
+    fontSize: 8,
+    margin: 20,
+  },
+  footerHeader: {
+    fontSize: 10,
   },
 });
 
@@ -502,7 +523,7 @@ const PDFDownload: React.FC<Props> = (Props) => {
           {Props.products.map((product) => (
             <View style={styles.productInfoRow} key={product._id} wrap={false}>
               <View style={styles.imageRow}>
-                <Image src={product.image} />
+                <Image src={product.image} style={styles.productImage} />
               </View>
               <View style={styles.nameRow}>
                 <Text style={styles.name}>{product.name}</Text>
@@ -542,6 +563,33 @@ const PDFDownload: React.FC<Props> = (Props) => {
               </Text>
             </View>
           </View>
+        </View>
+        <View style={styles.footer}>
+          <View style={styles.footerHeader}>
+            <Text>Ao aprovar esse orçamento, você está ciente de</Text>
+          </View>
+          <Text>Orçamento é valido por 7 dias.</Text>
+          <Text>
+            O pedido de impressão digital deve ser acompanhado de prova de cor.
+            Caso contrário, não realizamos devoluções por variações na
+            tonalidade das cores.
+          </Text>
+          <Text>
+            Imagens devem ser enviadas com 100% do tamanho e em 96 dpis. A
+            extensão que trabalhamos é JPEG.
+          </Text>
+          <Text>
+            Arquivos para produção de letras caixas e recorte devem estar em
+            vetor, nos formatos CDR ou EPS.
+          </Text>
+          <Text>
+            Todos os arquivos devem ser enviados com até 72 horas de
+            antecedência em relação a data de entrega
+          </Text>
+          <Text>
+            O não cumprimento dos itens acima gerará custo extra e atraso na
+            entrega.
+          </Text>
         </View>
       </Page>
     </Document>
