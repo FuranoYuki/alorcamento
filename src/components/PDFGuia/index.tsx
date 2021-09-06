@@ -262,6 +262,12 @@ const styles = StyleSheet.create({
     height: 90,
     maxHeight: 90,
   },
+  productImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    objectPosition: "center",
+  },
   nameRow: {
     display: "flex",
     alignItems: "center",
@@ -546,7 +552,7 @@ const PDFGuia: React.FC<Props> = (Props) => {
           {Props.products.map((product) => (
             <View style={styles.productInfoRow} key={product._id} wrap={false}>
               <View style={styles.imageRow}>
-                <Image src={product.image} />
+                <Image src={product.image} style={styles.productImage} />
               </View>
               <View style={styles.nameRow}>
                 <Text style={styles.name}>{product.name}</Text>
