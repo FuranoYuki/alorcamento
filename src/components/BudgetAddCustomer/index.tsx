@@ -217,6 +217,16 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
           />
         </Field>
         <Field>
+          <Label htmlFor="cep">CEP</Label>
+          <Input
+            id="cep"
+            name="cep"
+            type="text"
+            ref={cepRef}
+            onBlur={handlerInputBlur}
+          />
+        </Field>
+        <Field>
           <Label htmlFor="address">Endereço</Label>
           <Input
             id="address"
@@ -336,16 +346,6 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
             name="neighbor"
             type="text"
             ref={neighborRef}
-            onBlur={handlerInputBlur}
-          />
-        </Field>
-        <Field>
-          <Label htmlFor="cep">CEP</Label>
-          <Input
-            id="cep"
-            name="cep"
-            type="text"
-            ref={cepRef}
             onBlur={handlerInputBlur}
           />
         </Field>

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 import api from "../../service/http";
+import ModalDelete from "../ModalDelete";
 import { successStyle, errorStyle } from "../Notifications";
 import { Container, Table, THeader, TBody, Field } from "./styles";
 import CustomerTableCell from "../CustomerTableCell";
@@ -27,19 +28,28 @@ interface Customer {
 
 const CustomerTable: React.FC = () => {
   const history = useHistory();
+  const [id, setid] = useState("");
+  const [modal, setmodal] = useState(false);
   const [filterOrder, setfilterOrder] = useState(true);
   const [customers, setcustomers] = useState<Customer[]>([]);
 
-  const handlerDeleteRowClick = (id: string) => {
+  const handlerDeleteRowClick = () => {
     api
       .post("/alorcamentos/customer/delete", { id })
       .then((res) => {
         toast.success("Cliente excluido", successStyle);
+        setmodal(false);
         setcustomers(res.data.customers);
       })
       .catch(() => {
+        setmodal(true);
         toast.error("Falha ao excluir o cliente", errorStyle);
       });
+  };
+
+  const handlerDeleteModal = (idRow = "") => {
+    setid(idRow);
+    setmodal(!modal);
   };
 
   const handlerFieldClick = (e: React.MouseEvent) => {
@@ -223,6 +233,12 @@ const CustomerTable: React.FC = () => {
 
   return (
     <Container>
+      {modal && (
+        <ModalDelete
+          handlerDeleteModal={handlerDeleteModal}
+          handlerDeleteRowClick={handlerDeleteRowClick}
+        />
+      )}
       <Table>
         <THeader>
           <Field className="tableHeaderField" onClick={handlerFieldClick}>
@@ -275,9 +291,9 @@ const CustomerTable: React.FC = () => {
         <TBody>
           {customers.map((customer) => (
             <CustomerTableCell
-              customer={customer}
-              handlerDeleteRowClick={handlerDeleteRowClick}
               key={customer._id}
+              customer={customer}
+              handlerDeleteModal={handlerDeleteModal}
             />
           ))}
         </TBody>

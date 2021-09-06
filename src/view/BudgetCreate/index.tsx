@@ -100,6 +100,8 @@ const BudgetCreate: React.FC = () => {
     budget.append("guiaFile", guiaPdfFile);
     budget.append("customer", JSON.stringify(customer));
     budget.append("products", JSON.stringify(products));
+
+    toast.info("Cadastrando orçamento...", successStyle);
     api({
       headers: {
         "Content-Type": "multipart/form-data",
@@ -107,9 +109,6 @@ const BudgetCreate: React.FC = () => {
       data: budget,
       method: "POST",
       url: "/alorcamentos/budget/create",
-      onUploadProgress: () => {
-        toast.info("Cadastrando orçamento...", successStyle);
-      },
     })
       .then(() => {
         toast.success("Orçamento cadastrado", successStyle);

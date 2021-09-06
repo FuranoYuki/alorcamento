@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 import api from "../../service/http";
+import ModalDelete from "../ModalDelete";
 import ProductTableCell from "../ProductTableCell";
 import { successStyle, errorStyle } from "../Notifications";
 import { Container, Table, THeader, TBody, Field } from "./styles";
@@ -16,9 +17,11 @@ interface Product {
 }
 
 const ProductTable: React.FC = () => {
+  const [id, setid] = useState("");
+  const [modal, setmodal] = useState(false);
   const [products, setproducts] = useState<Product[]>();
 
-  const handlerRemoveClick = (id: string) => {
+  const handlerDeleteRowClick = () => {
     api
       .delete("/alorcamentos/product/delete", {
         data: {
@@ -28,15 +31,22 @@ const ProductTable: React.FC = () => {
       .then((res) => {
         if (res.data.productDeleted) {
           getProducts();
+          setmodal(false);
           toast.success("Produto excluido com sucesso", successStyle);
         }
       })
       .catch(() => {
+        setmodal(true);
         toast.error(
           "Houve um erro ao tentar excluir o produto, tente novamente mais tarde",
           errorStyle
         );
       });
+  };
+
+  const handlerDeleteModal = (idRow = "") => {
+    setid(idRow);
+    setmodal(!modal);
   };
 
   const getProducts = () => {
@@ -59,6 +69,12 @@ const ProductTable: React.FC = () => {
 
   return (
     <Container>
+      {modal && (
+        <ModalDelete
+          handlerDeleteModal={handlerDeleteModal}
+          handlerDeleteRowClick={handlerDeleteRowClick}
+        />
+      )}
       <Table>
         <THeader>
           <Field>
@@ -86,7 +102,7 @@ const ProductTable: React.FC = () => {
               <ProductTableCell
                 key={product._id}
                 product={product}
-                handlerRemoveClick={handlerRemoveClick}
+                handlerDeleteModal={handlerDeleteModal}
               />
             ))}
         </TBody>

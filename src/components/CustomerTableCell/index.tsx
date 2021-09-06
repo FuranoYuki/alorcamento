@@ -21,12 +21,12 @@ interface Customer {
 
 interface Props {
   customer: Customer;
-  handlerDeleteRowClick: (id: string) => void;
+  handlerDeleteModal: (id: string) => void;
 }
 
 const CustomerTableCell: React.FC<Props> = (Props) => {
   const handlerDeleteClick = () => {
-    Props.handlerDeleteRowClick(Props.customer._id);
+    Props.handlerDeleteModal(Props.customer._id);
   };
 
   return (
@@ -46,8 +46,8 @@ const CustomerTableCell: React.FC<Props> = (Props) => {
           <FontAwesomeIcon icon={faEdit} />
         </Link>
       </Td>
-      <TdRemove>
-        <FontAwesomeIcon icon={faTrashAlt} onClick={handlerDeleteClick} />
+      <TdRemove onClick={handlerDeleteClick}>
+        <FontAwesomeIcon icon={faTrashAlt} />
       </TdRemove>
     </Container>
   );

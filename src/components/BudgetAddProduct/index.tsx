@@ -37,10 +37,12 @@ interface Props {
 const BudgetAddProduct: React.FC<Props> = (Props) => {
   const id = useRef("0");
   const qtdRef = useRef<HTMLInputElement>(null);
+  const areaRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const widthRef = useRef<HTMLInputElement>(null);
   const imageRef = useRef<HTMLInputElement>(null);
   const valueRef = useRef<HTMLInputElement>(null);
+  const totalRef = useRef<HTMLInputElement>(null);
   const finishRef = useRef<HTMLInputElement>(null);
   const heightRef = useRef<HTMLInputElement>(null);
 
@@ -59,33 +61,40 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
 
   const objectRef = () => {
     const qtd = qtdRef.current as HTMLInputElement;
+    const area = areaRef.current as HTMLInputElement;
     const name = nameRef.current as HTMLInputElement;
     const image = imageRef.current as HTMLInputElement;
     const value = valueRef.current as HTMLInputElement;
     const width = widthRef.current as HTMLInputElement;
+    const total = totalRef.current as HTMLInputElement;
     const finish = finishRef.current as HTMLInputElement;
     const height = heightRef.current as HTMLInputElement;
 
     return {
       qtd,
+      area,
       name,
       image,
       value,
       width,
+      total,
       finish,
       height,
     };
   };
 
   const objectValues = (): IProduct | false => {
-    const { qtd, name, image, value, width, finish, height } = objectRef();
+    const { qtd, name, image, value, width, finish, height, area, total } =
+      objectRef();
 
     if (
       qtd.value &&
+      area.value &&
       name.value &&
       image.value &&
       value.value &&
       width.value &&
+      total.value &&
       finish.value &&
       height.value
     ) {
@@ -100,12 +109,8 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
         width: width.value.trim().replace(",", "."),
         height: height.value.trim().replace(",", "."),
         image: URL.createObjectURL(image.files?.item(0)),
-        area: String(
-          (Number(height.value.trim()) * Number(width.value.trim())).toFixed(2)
-        ),
-        total: String(
-          (Number(qtd.value.trim()) * Number(value.value.trim())).toFixed(2)
-        ),
+        area: area.value.trim().replace(",", "."),
+        total: total.value.trim().replace(",", "."),
       };
     } else {
       return false;
@@ -113,13 +118,16 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
   };
 
   const objectChange = () => {
-    const { qtd, name, image, value, width, finish, height } = objectRef();
+    const { qtd, name, image, value, width, finish, height, area, total } =
+      objectRef();
 
     qtd.value = "";
+    area.value = "";
     name.value = "";
     image.value = "";
     value.value = "";
     width.value = "";
+    total.value = "";
     finish.value = "";
     height.value = "";
   };
@@ -164,29 +172,29 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
   const inputChangeHandler = (e: React.ChangeEvent) => {
     const obj = e.currentTarget as HTMLInputElement;
     obj.value = obj.value.trim().replace(/[^\d.,]/g, "");
+
+    const { area, qtd, value, width, height } = objectRef();
+
+    if (area.value && qtd.value && value.value) {
+      totalCount();
+    }
+
+    if (height.value && width.value) {
+      width.value = width.value.replace(",", ".").trim();
+
+      height.value = height.value.replace(",", ".").trim();
+
+      area.value = String(
+        (Number(width.value) * Number(height.value)).toFixed(1)
+      );
+    }
   };
 
-  const handlerBlurInput = () => {
-    const width = widthRef.current as HTMLInputElement;
-    width.value = width.value.replace(",", ".").trim();
-    const infos = width.value.split(".");
-    if (
-      Number(infos[1]) / 5 !== 1 &&
-      Number(infos[1]) !== 0 &&
-      infos[1] !== undefined
-    ) {
-      if (Number(infos[1]) < 5) {
-        infos[1] = ".5";
-      } else {
-        infos[0] = String(Number(infos[0]) + 1);
-        infos[1] = "";
-      }
-    }
-    const newWidth = infos.join("");
-    const qtdValue = Number(newWidth) / 0.5;
-
-    const qtd = qtdRef.current as HTMLInputElement;
-    qtd.value = String(qtdValue);
+  const totalCount = () => {
+    const { total, area, qtd, value } = objectRef();
+    total.value = String(
+      (Number(area.value) * Number(qtd.value) * Number(value.value)).toFixed(2)
+    );
   };
 
   const handlerSearchClick = () => {
@@ -253,7 +261,6 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
                 id="width"
                 name="width"
                 ref={widthRef}
-                onBlur={handlerBlurInput}
                 onChange={inputChangeHandler}
               />
             </Field>
@@ -264,8 +271,12 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
                 id="height"
                 name="height"
                 ref={heightRef}
-                onBlur={handlerBlurInput}
+                onChange={inputChangeHandler}
               />
+            </Field>
+            <Field>
+              <Label htmlFor="area">m2</Label>
+              <Input type="text" id="area" name="area" ref={areaRef} />
             </Field>
             <Field>
               <Label htmlFor="qtd">QTD</Label>
@@ -284,6 +295,16 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
                 id="value"
                 name="value"
                 ref={valueRef}
+                onChange={inputChangeHandler}
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="total">Total</Label>
+              <Input
+                type="text"
+                id="total"
+                name="total"
+                ref={totalRef}
                 onChange={inputChangeHandler}
               />
             </Field>

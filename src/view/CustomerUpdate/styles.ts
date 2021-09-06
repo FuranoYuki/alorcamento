@@ -30,7 +30,7 @@ export const TopSection = styled.div`
   border-bottom: 1px solid var(--border-bottom);
 
   color: var(--gray-dark-color);
-  background-color: var(--white-color);
+  background-color: var(--body-color);
 `;
 
 export const Top = styled.div`

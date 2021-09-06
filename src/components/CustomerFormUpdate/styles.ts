@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+  display: flex;
+  justify-content: center;
+
   width: 100%;
+  height: 100%;
   padding: 40px 20px;
 
   background-color: var(--white-color);
@@ -9,8 +13,12 @@ export const Container = styled.div`
 
 export const Form = styled.form`
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
   gap: 40px 0;
+
+  max-width: 1000px;
 `;
 
 export const Inputs = styled.div`

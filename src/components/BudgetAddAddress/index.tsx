@@ -23,19 +23,46 @@ const BudgetAddAddress: React.FC<Props> = (Props) => {
   const cepRef = useRef<HTMLInputElement>(null);
   const cityRef = useRef<HTMLInputElement>(null);
   const stateRef = useRef<HTMLSelectElement>(null);
+  const nosendRef = useRef<HTMLSelectElement>(null);
   const addressRef = useRef<HTMLInputElement>(null);
   const neighborRef = useRef<HTMLInputElement>(null);
+  const localtakeRef = useRef<HTMLSelectElement>(null);
   const complementRef = useRef<HTMLInputElement>(null);
 
-  const handlerInputsBlur = async (e: React.FocusEvent) => {
+  const objectRef = () => {
     const cep = cepRef.current as HTMLInputElement;
     const city = cityRef.current as HTMLInputElement;
     const state = stateRef.current as HTMLSelectElement;
+    const nosend = nosendRef.current as HTMLSelectElement;
     const address = addressRef.current as HTMLInputElement;
     const neighbor = neighborRef.current as HTMLInputElement;
+    const localtake = localtakeRef.current as HTMLSelectElement;
     const complement = complementRef.current as HTMLInputElement;
 
+    return {
+      cep,
+      city,
+      state,
+      nosend,
+      address,
+      neighbor,
+      localtake,
+      complement,
+    };
+  };
+
+  const handlerInputsBlur = async (e: React.FocusEvent) => {
     const obj = e.currentTarget as HTMLInputElement | HTMLSelectElement;
+    const {
+      cep,
+      city,
+      state,
+      nosend,
+      address,
+      neighbor,
+      localtake,
+      complement,
+    } = objectRef();
 
     if (obj.id === "sendingCEP") {
       await axios
@@ -63,8 +90,10 @@ const BudgetAddAddress: React.FC<Props> = (Props) => {
       cep: cep.value,
       city: city.value,
       state: state.value,
+      nosend: nosend.value,
       address: address.value,
       neighbor: neighbor.value,
+      localtake: localtake.value,
       complement: complement.value,
     };
 
@@ -76,6 +105,16 @@ const BudgetAddAddress: React.FC<Props> = (Props) => {
       <Wrapper>
         <Title>Endereço de entrega</Title>
         <Fields>
+          <Field>
+            <Label htmlFor="sendingCEP">CEP</Label>
+            <Input
+              ref={cepRef}
+              type="text"
+              id="sendingCEP"
+              name="sendingCEP"
+              onBlur={handlerInputsBlur}
+            />
+          </Field>
           <Field>
             <Label htmlFor="sendingAddress">Endereço</Label>
             <Input
@@ -93,16 +132,6 @@ const BudgetAddAddress: React.FC<Props> = (Props) => {
               ref={complementRef}
               id="sendingNumber"
               name="sendingNumber"
-              onBlur={handlerInputsBlur}
-            />
-          </Field>
-          <Field>
-            <Label htmlFor="sendingCEP">CEP</Label>
-            <Input
-              ref={cepRef}
-              type="text"
-              id="sendingCEP"
-              name="sendingCEP"
               onBlur={handlerInputsBlur}
             />
           </Field>
@@ -215,6 +244,38 @@ const BudgetAddAddress: React.FC<Props> = (Props) => {
               </option>
               <option value="TO" id="TO_Sending">
                 TO
+              </option>
+            </Select>
+          </Field>
+          <Field>
+            <Label htmlFor="localtake">Retira no Local</Label>
+            <Select
+              id="localtake"
+              name="localtake"
+              ref={localtakeRef}
+              onBlur={handlerInputsBlur}
+            >
+              <option value="Nao" id="takeNo">
+                Nao
+              </option>
+              <option value="Sim" id="takeYes">
+                Sim
+              </option>
+            </Select>
+          </Field>
+          <Field>
+            <Label htmlFor="nosend">Sem entrega</Label>
+            <Select
+              id="nosend"
+              name="nosend"
+              ref={nosendRef}
+              onBlur={handlerInputsBlur}
+            >
+              <option value="Nao" id="nosendNo">
+                Nao
+              </option>
+              <option value="Sim" id="nosendYes">
+                Sim
               </option>
             </Select>
           </Field>

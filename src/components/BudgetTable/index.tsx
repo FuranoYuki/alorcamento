@@ -4,12 +4,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 import api from "../../service/http";
+import ModalDelete from "../ModalDelete";
 import IBudget from "../../interfaces/IBudget";
 import BudgetTableCell from "../BudgetTableCell";
 import { successStyle, errorStyle } from "../Notifications";
 import { Container, Table, THeader, TBody, Field } from "./styles";
 
 const BudgetTable: React.FC = () => {
+  const [id, setid] = useState("");
+  const [modal, setmodal] = useState(false);
   const [filterOrder, setfilterOrder] = useState(true);
   const [budgets, setbudgets] = useState<IBudget[]>([]);
 
@@ -131,23 +134,30 @@ const BudgetTable: React.FC = () => {
     handlerOrderCustomer(fieldName.innerText);
   };
 
-  const handlerDeleteRowClick = (id: string) => {
+  const handlerDeleteRowClick = () => {
     api
       .delete("alorcamentos/budget/deleteOne", {
         data: {
-          id,
+          id: id,
         },
       })
       .then((res) => {
         setbudgets(res.data.budgets);
+        setmodal(false);
         toast.success("Orçamento deletado com sucesso", successStyle);
       })
       .catch(() => {
+        setmodal(true);
         toast.error(
           "Não foi possivel deletar o Orçamento, tente novamente mais tarde",
           errorStyle
         );
       });
+  };
+
+  const handlerDeleteModal = (idRow = "") => {
+    setid(idRow);
+    setmodal(!modal);
   };
 
   useEffect(() => {
@@ -166,6 +176,12 @@ const BudgetTable: React.FC = () => {
 
   return (
     <Container>
+      {modal && (
+        <ModalDelete
+          handlerDeleteModal={handlerDeleteModal}
+          handlerDeleteRowClick={handlerDeleteRowClick}
+        />
+      )}
       <Table>
         <THeader>
           <Field className="tableHeaderField" onClick={handlerFieldClick}>
@@ -223,7 +239,7 @@ const BudgetTable: React.FC = () => {
               <BudgetTableCell
                 budget={budget}
                 key={budget._id}
-                handlerDeleteRowClick={handlerDeleteRowClick}
+                handlerDeleteModal={handlerDeleteModal}
               />
             ))}
         </TBody>

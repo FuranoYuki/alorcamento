@@ -214,19 +214,6 @@ const CustomerFormCreate: React.FC = () => {
           </Field>
           <Field>
             <Header>
-              <Label htmlFor="cpf">CPF</Label>
-              <span ref={cpfWarningRef}>CPF já cadastrado</span>
-              <span ref={cpfEmptyRef}>CPF possui no mínimo 11 algarismos</span>
-            </Header>
-            <Input
-              id="cpf"
-              name="cpf"
-              ref={cpfRef}
-              onChange={handlerInputChange}
-            />
-          </Field>
-          <Field>
-            <Header>
               <Label htmlFor="cep">CEP</Label>
               <span>Error</span>
             </Header>
@@ -345,6 +332,31 @@ const CustomerFormCreate: React.FC = () => {
           </Field>
           <Field>
             <Header>
+              <Label htmlFor="phoneNumber">Telefone</Label>
+              <span>Error</span>
+            </Header>
+            <Input
+              id="phoneNumber"
+              name="phoneNumber"
+              ref={phoneNumberRef}
+              onChange={handlerInputChange}
+            />
+          </Field>
+          <Field>
+            <Header>
+              <Label htmlFor="cpf">CPF</Label>
+              <span ref={cpfWarningRef}>CPF já cadastrado</span>
+              <span ref={cpfEmptyRef}>CPF possui no mínimo 11 algarismos</span>
+            </Header>
+            <Input
+              id="cpf"
+              name="cpf"
+              ref={cpfRef}
+              onChange={handlerInputChange}
+            />
+          </Field>
+          <Field>
+            <Header>
               <Label htmlFor="cnpj">CNPJ</Label>
               <span ref={cnpjWarningRef}>CNPJ já cadastrado</span>
               <span ref={cnpjEmptyRef}>
@@ -355,18 +367,6 @@ const CustomerFormCreate: React.FC = () => {
               id="cnpj"
               name="cnpj"
               ref={cnpjRef}
-              onChange={handlerInputChange}
-            />
-          </Field>
-          <Field>
-            <Header>
-              <Label htmlFor="phoneNumber">Telefone</Label>
-              <span>Error</span>
-            </Header>
-            <Input
-              id="phoneNumber"
-              name="phoneNumber"
-              ref={phoneNumberRef}
               onChange={handlerInputChange}
             />
           </Field>

@@ -14,12 +14,12 @@ interface Product {
 
 interface Props {
   product: Product;
-  handlerRemoveClick: (id: string) => void;
+  handlerDeleteModal: (id: string) => void;
 }
 
 const ProductTableCell: React.FC<Props> = (Props) => {
   const handlerRemoveClick = () => {
-    Props.handlerRemoveClick(Props.product._id);
+    Props.handlerDeleteModal(Props.product._id);
   };
 
   return (

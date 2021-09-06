@@ -5,6 +5,8 @@ interface ISendingAddress {
   neighbor?: string;
   city?: string;
   state?: string;
+  localtake?: string;
+  nosend?: string;
 }
 
 export default ISendingAddress;

@@ -159,13 +159,6 @@ const CustomerFormUpdate: React.FC<Props> = (Props) => {
           </Field>
           <Field>
             <Header>
-              <Label htmlFor="cpf">CPF</Label>
-              <span>CPF já cadastrado</span>
-            </Header>
-            <Input disabled id="cpf" name="cpf" value={cpf} />
-          </Field>
-          <Field>
-            <Header>
               <Label htmlFor="cep">CEP</Label>
               <span>Error</span>
             </Header>
@@ -310,13 +303,6 @@ const CustomerFormUpdate: React.FC<Props> = (Props) => {
           </Field>
           <Field>
             <Header>
-              <Label htmlFor="cnpj">CNPJ</Label>
-              <span>CNPJ já cadastrado</span>
-            </Header>
-            <Input disabled id="cnpj" name="cnpj" value={cnpj} />
-          </Field>
-          <Field>
-            <Header>
               <Label htmlFor="phoneNumber">Telefone</Label>
               <span>Error</span>
             </Header>
@@ -326,6 +312,20 @@ const CustomerFormUpdate: React.FC<Props> = (Props) => {
               value={phoneNumber}
               onChange={handlerChangeInput}
             />
+          </Field>
+          <Field>
+            <Header>
+              <Label htmlFor="cpf">CPF</Label>
+              <span>CPF já cadastrado</span>
+            </Header>
+            <Input disabled id="cpf" name="cpf" value={cpf} />
+          </Field>
+          <Field>
+            <Header>
+              <Label htmlFor="cnpj">CNPJ</Label>
+              <span>CNPJ já cadastrado</span>
+            </Header>
+            <Input disabled id="cnpj" name="cnpj" value={cnpj} />
           </Field>
         </Inputs>
         <Buttons>

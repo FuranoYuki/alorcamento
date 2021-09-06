@@ -14,7 +14,7 @@ import { Container, Td, TdRemove, TdEdit } from "./styles";
 
 interface Props {
   budget: IBudget;
-  handlerDeleteRowClick: (id: string) => void;
+  handlerDeleteModal: (id: string) => void;
 }
 
 const ProductTableCell: React.FC<Props> = (Props) => {
@@ -22,7 +22,7 @@ const ProductTableCell: React.FC<Props> = (Props) => {
   const [time, settime] = useState("");
 
   const handlerClick = () => {
-    Props.handlerDeleteRowClick(Props.budget._id);
+    Props.handlerDeleteModal(Props.budget._id);
   };
 
   useEffect(() => {

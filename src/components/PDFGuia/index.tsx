@@ -6,6 +6,7 @@ import {
   Document,
   Image,
   StyleSheet,
+  Font,
 } from "@react-pdf/renderer";
 
 import IProduct from "../../interfaces/IProduct";
@@ -19,6 +20,19 @@ interface Props {
   date?: string;
   address?: string;
 }
+
+Font.register({
+  family: "Open Sans",
+  fonts: [
+    {
+      src: "https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-regular.ttf",
+    },
+    {
+      src: "https://cdn.jsdelivr.net/npm/open-sans-all@0.1.3/fonts/open-sans-600.ttf",
+      fontWeight: 600,
+    },
+  ],
+});
 
 const styles = StyleSheet.create({
   page: {
@@ -87,8 +101,9 @@ const styles = StyleSheet.create({
   title: {
     width: 100 + "%",
     fontSize: 16,
-    fontWeight: "heavy",
     textAlign: "center",
+    fontWeight: 600,
+    fontFamily: "Open Sans",
   },
   customerInfo: {
     display: "flex",
@@ -103,6 +118,7 @@ const styles = StyleSheet.create({
   },
   customerInfoRow: {
     display: "flex",
+    alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
     width: 100 + "%",
@@ -110,7 +126,8 @@ const styles = StyleSheet.create({
   infoLongFieldName: {
     display: "flex",
     flexGrow: 1,
-    flexDirection: "column",
+    alignItems: "center",
+    flexDirection: "row",
 
     padding: 5,
     paddingRight: 4,
@@ -123,7 +140,8 @@ const styles = StyleSheet.create({
   },
   infoLongFieldVendedor: {
     display: "flex",
-    flexDirection: "column",
+    alignItems: "center",
+    flexDirection: "row",
 
     width: 184,
     padding: 5,
@@ -135,7 +153,8 @@ const styles = StyleSheet.create({
   },
   infoShortFieldMid: {
     display: "flex",
-    flexDirection: "column",
+    alignItems: "center",
+    flexDirection: "row",
 
     width: 185,
     padding: 5,
@@ -147,7 +166,9 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
   },
   label: {
-    marginBottom: 3,
+    marginRight: 3,
+    fontWeight: 600,
+    fontFamily: "Open Sans",
   },
   input: {},
   productsInfo: {
@@ -334,6 +355,28 @@ const styles = StyleSheet.create({
 
     color: "black",
   },
+  noSend: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+
+    marginLeft: 20,
+    marginRight: 20,
+    borderRight: 1,
+  },
+  noSendField: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
+
+    padding: "5 14",
+    fontSize: 10,
+    borderColor: "black",
+    borderTop: 1,
+    borderBottom: 1,
+    borderLeft: 1,
+  },
 });
 
 const PDFGuia: React.FC<Props> = (Props) => {
@@ -470,6 +513,16 @@ const PDFGuia: React.FC<Props> = (Props) => {
                 <Text style={styles.input}>{Props.sendingAddress.state}</Text>
               </View>
             </View>
+          </View>
+        </View>
+        <View style={styles.noSend}>
+          <View style={styles.noSendField}>
+            <Text style={styles.label}>Retira no local</Text>
+            <Text>{Props.sendingAddress.localtake}</Text>
+          </View>
+          <View style={styles.noSendField}>
+            <Text style={styles.label}>Sem entrega</Text>
+            <Text>{Props.sendingAddress.nosend}</Text>
           </View>
         </View>
         <View style={styles.productsInfo} wrap={true}>
