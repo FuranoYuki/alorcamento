@@ -55,7 +55,12 @@ const ModalDelete: React.FC<Props> = (Props) => {
         <Header>Delete</Header>
         <Field>
           <Label htmlFor="password">Senha</Label>
-          <Input id="password" name="password" ref={passwordDeleteRef} />
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            ref={passwordDeleteRef}
+          />
         </Field>
         <Buttons>
           <ButtonCancel type="button" onClick={handlerCloseModal}>
