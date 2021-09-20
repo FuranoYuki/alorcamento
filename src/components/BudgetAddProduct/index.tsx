@@ -46,8 +46,8 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
   const finishRef = useRef<HTMLInputElement>(null);
   const heightRef = useRef<HTMLInputElement>(null);
 
-  const [products, setProducts] = useState<IProduct[]>([]);
   const [modal, setmodal] = useState(false);
+  const [products, setProducts] = useState<IProduct[]>([]);
 
   const handlerRemoveField = (e: React.MouseEvent) => {
     const remove = e.currentTarget.parentNode as HTMLDivElement;
@@ -179,15 +179,15 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
       totalCount();
     }
 
-    if (height.value && width.value) {
-      width.value = width.value.replace(",", ".").trim();
+    width.value = width.value.replace(",", ".").trim();
 
-      height.value = height.value.replace(",", ".").trim();
+    height.value = height.value.replace(",", ".").trim();
 
-      area.value = String(
-        (Number(width.value) * Number(height.value)).toFixed(1)
-      );
-    }
+    area.value = String(
+      (Number(width.value) * Number(height.value)).toFixed(2)
+    );
+
+    totalCount();
   };
 
   const totalCount = () => {

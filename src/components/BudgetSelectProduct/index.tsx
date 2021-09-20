@@ -1,5 +1,5 @@
 import React, { useEffect, useState, memo } from "react";
-import { faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import api from "../../service/http";
@@ -83,7 +83,6 @@ const BudgetSelectProduct: React.FC<Props> = (Props) => {
             placeholder="pequise um nome"
             onChange={handlerChangeInput}
           />
-          <FontAwesomeIcon icon={faSearch} />
         </Search>
         <Content>
           <ContentHeader>

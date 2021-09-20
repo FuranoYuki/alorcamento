@@ -1,11 +1,10 @@
 import React, { useRef, memo } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
 
-import api from "../../service/http";
-import "react-toastify/dist/ReactToastify.css";
+// import api from "../../service/http";
 import ICustomer from "../../interfaces/ICustomer";
+// import BudgetSelectCustomer from "../BudgetSelectCustomer";
 import { successStyle, errorStyle } from "../Notifications";
 import { formatCPF, formatCNPJ, formatPhone } from "../FormatInput";
 import {
@@ -18,23 +17,13 @@ import {
   Select,
   AutoCode,
   Button,
-  AutoInputs,
-  AutoInput,
-  WarningError,
-  WarningExist,
-  Warning,
-  CodeInput,
 } from "./styles";
-import { login, logout } from "../../service/token";
-import refreshToken from "../../functions/refreshToken";
 
 interface Props {
   handlerCustomer: (cust: ICustomer) => void;
 }
 
 const BudgetAddCustomer: React.FC<Props> = (Props) => {
-  const history = useHistory();
-
   const cpfRef = useRef<HTMLInputElement>(null);
   const cepRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
@@ -46,11 +35,7 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
   const neighborRef = useRef<HTMLInputElement>(null);
   const phoneNumberRef = useRef<HTMLInputElement>(null);
 
-  const cpfAutoRef = useRef<HTMLInputElement>(null);
-  const cnpjAutoRef = useRef<HTMLInputElement>(null);
-
-  const warningErrorRef = useRef<HTMLDivElement>(null);
-  const warningExistRef = useRef<HTMLDivElement>(null);
+  // const [modal, setmodal] = useState(false);
 
   const handlerInputBlur = async (e: React.FocusEvent | null = null) => {
     if (e) {
@@ -60,17 +45,30 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
       }
     }
 
+    const {
+      cep,
+      cpf,
+      name,
+      city,
+      cnpj,
+      state,
+      email,
+      address,
+      neighbor,
+      phoneNumber,
+    } = objectsRef();
+
     const customer = {
-      cep: cepRef.current?.value.trim(),
-      cpf: cpfRef.current?.value.trim(),
-      name: nameRef.current?.value.trim(),
-      city: cityRef.current?.value.trim(),
-      cnpj: cnpjRef.current?.value.trim(),
-      state: stateRef.current?.value.trim(),
-      email: emailRef.current?.value.trim(),
-      address: addressRef.current?.value.trim(),
-      neighbor: neighborRef.current?.value.trim(),
-      phoneNumber: phoneNumberRef.current?.value.trim(),
+      cep: cep.value.trim(),
+      cpf: cpf.value.trim(),
+      name: name.value.trim(),
+      city: city.value.trim(),
+      cnpj: cnpj.value.trim(),
+      state: state.value.trim(),
+      email: email.value.trim(),
+      address: address.value.trim(),
+      neighbor: neighbor.value.trim(),
+      phoneNumber: phoneNumber.value.trim(),
     };
 
     Props.handlerCustomer(customer);
@@ -80,10 +78,7 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
     await axios
       .get(`https://viacep.com.br/ws/${obj.value.trim()}/json/`)
       .then((res) => {
-        const city = cityRef.current as HTMLInputElement;
-        const state = stateRef.current as HTMLSelectElement;
-        const address = addressRef.current as HTMLInputElement;
-        const neighbor = neighborRef.current as HTMLInputElement;
+        const { city, state, address, neighbor } = objectsRef();
 
         state.value = res.data.uf;
         city.value = res.data.localidade;
@@ -103,6 +98,32 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
       });
   };
 
+  const objectsRef = () => {
+    const cep = cepRef.current as HTMLInputElement;
+    const cpf = cpfRef.current as HTMLInputElement;
+    const cnpj = cnpjRef.current as HTMLInputElement;
+    const name = nameRef.current as HTMLInputElement;
+    const email = emailRef.current as HTMLInputElement;
+    const city = cityRef.current as HTMLInputElement;
+    const state = stateRef.current as HTMLSelectElement;
+    const address = addressRef.current as HTMLInputElement;
+    const neighbor = neighborRef.current as HTMLInputElement;
+    const phoneNumber = phoneNumberRef.current as HTMLInputElement;
+
+    return {
+      cep,
+      cpf,
+      cnpj,
+      name,
+      email,
+      city,
+      state,
+      address,
+      neighbor,
+      phoneNumber,
+    };
+  };
+
   const handlerInputChange = (e: React.ChangeEvent) => {
     const obj = e.currentTarget as HTMLInputElement;
     if (obj.id === "cpf") {
@@ -118,76 +139,35 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
     }
   };
 
-  const handlerAutoChange = (e: React.ChangeEvent) => {
-    const obj = e.currentTarget as HTMLInputElement;
-    if (obj.id === "cpfAuto") {
-      obj.value = formatCPF(obj.value);
-    }
+  // const handlerSearchClick = () => {
+  //   setmodal(!modal);
+  // };
 
-    if (obj.id === "cnpjAuto") {
-      obj.value = formatCNPJ(obj.value);
-    }
-  };
+  // const handlerSelectField = (customer: ICustomer) => {
+  //   const {
+  //     cep,
+  //     cpf,
+  //     cnpj,
+  //     name,
+  //     email,
+  //     city,
+  //     state,
+  //     address,
+  //     neighbor,
+  //     phoneNumber,
+  //   } = objectsRef();
 
-  const handlerFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const cpf = cpfAutoRef.current as HTMLInputElement;
-    const cnpj = cnpjAutoRef.current as HTMLInputElement;
-    const warning = warningErrorRef.current as HTMLDivElement;
-    const warningExist = warningExistRef.current as HTMLDivElement;
-
-    warning.style.display = !cnpj.value && !cpf.value ? "flex" : "none";
-
-    api
-      .post("/alorcamentos/customer/findOneAuto", {
-        cnpj: cnpj.value,
-        cpf: cpf.value,
-      })
-      .then((res) => {
-        warningExist.style.display = "none";
-        const customerData = res.data.customer;
-
-        const cpf = cpfRef.current as HTMLInputElement;
-        const cep = cepRef.current as HTMLInputElement;
-        const name = nameRef.current as HTMLInputElement;
-        const city = cityRef.current as HTMLInputElement;
-        const cnpj = cnpjRef.current as HTMLInputElement;
-        const email = emailRef.current as HTMLInputElement;
-        const state = stateRef.current as HTMLSelectElement;
-        const address = addressRef.current as HTMLInputElement;
-        const neighbor = neighborRef.current as HTMLInputElement;
-        const phoneNumber = phoneNumberRef.current as HTMLInputElement;
-
-        cep.value = customerData.cep;
-        cpf.value = customerData.cpf;
-        cnpj.value = customerData.cnpj;
-        name.value = customerData.name;
-        city.value = customerData.city;
-        email.value = customerData.email;
-        state.value = customerData.state;
-        address.value = customerData.address;
-        neighbor.value = customerData.neighbor;
-        phoneNumber.value = customerData.phoneNumber;
-
-        handlerInputBlur();
-      })
-      .catch(async (error) => {
-        if (error.response.data.customerDoesExist) {
-          warningExist.style.display = "flex";
-        }
-        if (error.response.data.tokenExpired) {
-          const newToken = await refreshToken();
-
-          if (newToken != "failedRefresh") {
-            login(newToken);
-            history.push("/budget");
-          } else {
-            logout();
-            history.push("/login");
-          }
-        }
-      });
-  };
+  //   cep.value = customer.cep ? customer.cep : "";
+  //   cpf.value = customer.cpf ? customer.cpf : "";
+  //   cnpj.value = customer.cnpj ? customer.cnpj : "";
+  //   name.value = customer.name ? customer.name : "";
+  //   email.value = customer.email ? customer.email : "";
+  //   city.value = customer.city ? customer.city : "";
+  //   state.value = customer.state ? customer.state : "";
+  //   address.value = customer.address ? customer.address : "";
+  //   neighbor.value = customer.neighbor ? customer.neighbor : "";
+  //   phoneNumber.value = customer.phoneNumber ? customer.phoneNumber : "";
+  // };
 
   return (
     <Container>
@@ -382,42 +362,10 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
           />
         </Field>
       </Fields>
-      <AutoCode onSubmit={handlerFormSubmit}>
-        <AutoInputs>
-          <AutoInput>
-            <Label htmlFor="cpfAuto">CPF</Label>
-            <CodeInput
-              id="cpfAuto"
-              name="cpfAuto"
-              type="text"
-              ref={cpfAutoRef}
-              onChange={handlerAutoChange}
-            />
-          </AutoInput>
-          <AutoInput>
-            <Label htmlFor="cnpjAuto">CNPJ</Label>
-            <CodeInput
-              id="cnpjAuto"
-              name="cnpjAuto"
-              type="text"
-              ref={cnpjAutoRef}
-              onChange={handlerAutoChange}
-            />
-          </AutoInput>
-        </AutoInputs>
-        <WarningExist ref={warningExistRef}>
-          Não foi encontrado nenhum usuário cadastrado com esse CPF ou CNPJ
-        </WarningExist>
-        <WarningError ref={warningErrorRef}>
-          Prencha um dos dois campos &apos;CPF&apos; ou &apos;CNPJ&apos; para
-          fazer o preenchimento automático
-        </WarningError>
-        <Button type="submit">Preencher</Button>
-        <Warning>
-          Precha os campos automaticamente usando o CPF ou CNPJ de um cliente já
-          cadastrado
-        </Warning>
+      <AutoCode>
+        <Button type="button">Preencher</Button>
       </AutoCode>
+      {/* {modal && <BudgetSelectCustomer />} */}
     </Container>
   );
 };
