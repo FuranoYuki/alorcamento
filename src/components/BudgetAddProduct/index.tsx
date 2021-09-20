@@ -204,7 +204,7 @@ const BudgetAddProduct: React.FC<Props> = (Props) => {
   const handlerSelected = (data: Product) => {
     const { name, finish, value } = objectRef();
     name.value = data.name;
-    value.value = data.value;
+    value.value = data.value.replace(",", ".");
     finish.value = data.finish;
 
     handlerSearchClick();

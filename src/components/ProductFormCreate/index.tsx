@@ -86,8 +86,8 @@ const ProductFormCreate: React.FC = () => {
       api
         .post("/alorcamentos/product/create", {
           name: name.value.toLowerCase().trim(),
-          finish: finish.value.trim(),
-          value: price.value.toLowerCase().trim(),
+          finish: finish.value.trim().replace(",", "."),
+          value: price.value.toLowerCase().trim().replace(",", "."),
         })
         .then((res) => {
           if (res.data.productCreate) {
