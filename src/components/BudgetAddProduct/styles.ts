@@ -78,8 +78,9 @@ export const AddProducts = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 30px 0;
+  gap: 40px 0;
 
+  width: 850px;
   max-width: 100%;
   margin: auto;
   padding: 30px;
@@ -93,7 +94,7 @@ export const Fields = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0 15px;
+  gap: 15px 15px;
 `;
 
 export const Field = styled.div`

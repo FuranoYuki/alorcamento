@@ -90,7 +90,7 @@ export const Buttons = styled.div`
   align-items: center;
   gap: 10px 10px;
 
-  padding-bottom: 20px;
+  padding: 25px;
 
   color: var(--white-color);
   background-color: var(--white-color);

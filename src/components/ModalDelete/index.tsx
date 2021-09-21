@@ -25,6 +25,7 @@ const ModalDelete: React.FC<Props> = (Props) => {
 
   const handlerDeleteButtonClick = () => {
     const password = passwordDeleteRef.current as HTMLInputElement;
+    toast.success("verificando senha..", successStyle);
 
     api
       .post("/alorcamentos/user/VerifyPasswordDelete", {
@@ -59,6 +60,7 @@ const ModalDelete: React.FC<Props> = (Props) => {
             id="password"
             name="password"
             type="password"
+            autoComplete="off"
             ref={passwordDeleteRef}
           />
         </Field>

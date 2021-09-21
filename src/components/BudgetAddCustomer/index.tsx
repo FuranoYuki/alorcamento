@@ -1,10 +1,9 @@
-import React, { useRef, memo } from "react";
+import React, { useRef, memo, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// import api from "../../service/http";
 import ICustomer from "../../interfaces/ICustomer";
-// import BudgetSelectCustomer from "../BudgetSelectCustomer";
+import BudgetSelectCustomer from "../BudgetSelectCustomer";
 import { successStyle, errorStyle } from "../Notifications";
 import { formatCPF, formatCNPJ, formatPhone } from "../FormatInput";
 import {
@@ -35,7 +34,7 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
   const neighborRef = useRef<HTMLInputElement>(null);
   const phoneNumberRef = useRef<HTMLInputElement>(null);
 
-  // const [modal, setmodal] = useState(false);
+  const [modal, setmodal] = useState(false);
 
   const handlerInputBlur = async (e: React.FocusEvent | null = null) => {
     if (e) {
@@ -139,35 +138,37 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
     }
   };
 
-  // const handlerSearchClick = () => {
-  //   setmodal(!modal);
-  // };
+  const handlerSearchClick = () => {
+    setmodal(!modal);
+  };
 
-  // const handlerSelectField = (customer: ICustomer) => {
-  //   const {
-  //     cep,
-  //     cpf,
-  //     cnpj,
-  //     name,
-  //     email,
-  //     city,
-  //     state,
-  //     address,
-  //     neighbor,
-  //     phoneNumber,
-  //   } = objectsRef();
+  const handlerSelectField = (customer: ICustomer) => {
+    const {
+      cep,
+      cpf,
+      cnpj,
+      name,
+      email,
+      city,
+      state,
+      address,
+      neighbor,
+      phoneNumber,
+    } = objectsRef();
 
-  //   cep.value = customer.cep ? customer.cep : "";
-  //   cpf.value = customer.cpf ? customer.cpf : "";
-  //   cnpj.value = customer.cnpj ? customer.cnpj : "";
-  //   name.value = customer.name ? customer.name : "";
-  //   email.value = customer.email ? customer.email : "";
-  //   city.value = customer.city ? customer.city : "";
-  //   state.value = customer.state ? customer.state : "";
-  //   address.value = customer.address ? customer.address : "";
-  //   neighbor.value = customer.neighbor ? customer.neighbor : "";
-  //   phoneNumber.value = customer.phoneNumber ? customer.phoneNumber : "";
-  // };
+    cep.value = customer.cep ? customer.cep : "";
+    cpf.value = customer.cpf ? customer.cpf : "";
+    cnpj.value = customer.cnpj ? customer.cnpj : "";
+    name.value = customer.name ? customer.name : "";
+    email.value = customer.email ? customer.email : "";
+    city.value = customer.city ? customer.city : "";
+    state.value = customer.state ? customer.state : "";
+    address.value = customer.address ? customer.address : "";
+    neighbor.value = customer.neighbor ? customer.neighbor : "";
+    phoneNumber.value = customer.phoneNumber ? customer.phoneNumber : "";
+
+    Props.handlerCustomer(customer);
+  };
 
   return (
     <Container>
@@ -363,9 +364,16 @@ const BudgetAddCustomer: React.FC<Props> = (Props) => {
         </Field>
       </Fields>
       <AutoCode>
-        <Button type="button">Preencher</Button>
+        <Button type="button" onClick={handlerSearchClick}>
+          Preencher
+        </Button>
       </AutoCode>
-      {/* {modal && <BudgetSelectCustomer />} */}
+      {modal && (
+        <BudgetSelectCustomer
+          handlerSelected={handlerSelectField}
+          handlerSearchClick={handlerSearchClick}
+        />
+      )}
     </Container>
   );
 };

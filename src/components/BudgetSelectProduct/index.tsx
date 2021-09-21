@@ -54,6 +54,7 @@ const BudgetSelectProduct: React.FC<Props> = (Props) => {
 
   const handlerSelectClick = () => {
     if (productSelect !== undefined) Props.handlerSelected(productSelect);
+    handlerCloseModal();
   };
 
   const getProducts = () => {

@@ -22,13 +22,16 @@ export const Modal = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 10px;
-  width: 600px;
+  width: 900px;
+  max-width: 85%;
+  height: 500px;
   min-height: 400px;
   padding: 20px;
 
   @media (max-width: 700px) {
     width: 100%;
     height: 100%;
+    max-width: 100%;
   }
 
   background-color: var(--body-color);
@@ -89,7 +92,7 @@ export const Content = styled.div`
 
   width: 100%;
   min-height: 200px;
-  max-height: 300px;
+  max-height: 400px;
 
   background-color: var(--white-color);
 `;
@@ -102,6 +105,7 @@ export const ContentHeader = styled.div`
 
 export const ContentHeaderField = styled.div`
   width: 120px;
+  min-width: 120px;
   padding: 10px;
   font-size: 14px;
   font-weight: 600;

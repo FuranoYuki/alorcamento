@@ -151,6 +151,20 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderStyle: "solid",
   },
+  infoLongFieldEmail: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+
+    width: 184,
+    padding: 5,
+    fontSize: 10,
+    borderBottom: 1,
+
+    borderColor: "black",
+    borderStyle: "solid",
+  },
   infoShortFieldMid: {
     display: "flex",
     alignItems: "center",
@@ -443,7 +457,7 @@ const PDFGuia: React.FC<Props> = (Props) => {
                 <Text style={styles.label}>Cliente:</Text>
                 <Text style={styles.input}>{Props.customer.name}</Text>
               </View>
-              <View style={styles.infoLongFieldVendedor}>
+              <View style={styles.infoLongFieldEmail}>
                 <Text style={styles.label}>E-mail:</Text>
                 <Text style={styles.input}>{Props.customer.email}</Text>
               </View>
