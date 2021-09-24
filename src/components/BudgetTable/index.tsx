@@ -186,6 +186,10 @@ const BudgetTable: React.FC = () => {
         <THeader>
           <Field className="tableHeaderField" onClick={handlerFieldClick}>
             <FontAwesomeIcon icon={faChevronUp} />
+            <span>Data</span>
+          </Field>
+          <Field className="tableHeaderField" onClick={handlerFieldClick}>
+            <FontAwesomeIcon icon={faChevronUp} />
             <span>Nome</span>
           </Field>
           <Field className="tableHeaderField" onClick={handlerFieldClick}>
@@ -211,10 +215,6 @@ const BudgetTable: React.FC = () => {
           <Field className="tableHeaderField" onClick={handlerFieldClick}>
             <FontAwesomeIcon icon={faChevronUp} />
             <span>Total</span>
-          </Field>
-          <Field className="tableHeaderField" onClick={handlerFieldClick}>
-            <FontAwesomeIcon icon={faChevronUp} />
-            <span>Criacao</span>
           </Field>
           <Field className="tableHeaderField" onClick={handlerFieldClick}>
             <FontAwesomeIcon icon={faChevronUp} />

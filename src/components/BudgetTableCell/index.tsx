@@ -37,6 +37,10 @@ const ProductTableCell: React.FC<Props> = (Props) => {
 
   return (
     <Container>
+      <Td>
+        {" "}
+        {date} <br /> {time}{" "}
+      </Td>
       <Td> {Props.budget.name} </Td>
       <Td> {Props.budget.cpf} </Td>
       <Td> {Props.budget.cnpj} </Td>
@@ -44,10 +48,6 @@ const ProductTableCell: React.FC<Props> = (Props) => {
       <Td> {Props.budget.state} </Td>
       <Td> {Props.budget.qtd} </Td>
       <Td> R$ {Props.budget.total} </Td>
-      <Td>
-        {" "}
-        {date} <br /> {time}{" "}
-      </Td>
       <Td> {Props.budget.paid} </Td>
       <Td>
         <Link
