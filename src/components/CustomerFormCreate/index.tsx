@@ -278,8 +278,8 @@ const CustomerFormCreate: React.FC = () => {
               <option value="RN" id="RN">
                 RN
               </option>
-              <option value="RD" id="RD">
-                RD
+              <option value="RS" id="RS">
+                RS
               </option>
               <option value="RO" id="RO">
                 RO

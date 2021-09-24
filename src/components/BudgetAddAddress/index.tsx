@@ -224,8 +224,8 @@ const BudgetAddAddress: React.FC<Props> = (Props) => {
               <option value="RN" id="RN_Sending">
                 RN
               </option>
-              <option value="RD" id="RD_Sending">
-                RD
+              <option value="RS" id="RS_Sending">
+                RS
               </option>
               <option value="RO" id="RO_Sending">
                 RO
