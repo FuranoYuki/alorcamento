@@ -36,7 +36,6 @@ Font.register({
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: "#E4E4E4",
     position: "relative",
   },
   body: {

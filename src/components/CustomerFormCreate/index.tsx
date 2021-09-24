@@ -76,21 +76,6 @@ const CustomerFormCreate: React.FC = () => {
       toast.error("Nome necessario para o cadastro", errorStyle);
     }
 
-    if (!email.value) {
-      emailWarning.style.display = "flex";
-      toast.error("Email necessario para o cadastro", errorStyle);
-    }
-
-    if (cpf.value.length < 11) {
-      cpfEmpty.style.display = "flex";
-      toast.error("CPF incorreto", errorStyle);
-    }
-
-    if (cnpj.value.length < 14) {
-      cnpjEmpty.style.display = "flex";
-      toast.error("CNPJ incorreto", errorStyle);
-    }
-
     if (name.value) {
       nameWarning.style.display = "none";
     }
@@ -107,7 +92,7 @@ const CustomerFormCreate: React.FC = () => {
       cnpjEmpty.style.display = "none";
     }
 
-    if (name.value != "" && email.value != "") {
+    if (name.value !== "") {
       api
         .post("/alorcamentos/customer/create", {
           cpf: cpf.value.trim(),

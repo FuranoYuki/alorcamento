@@ -35,9 +35,7 @@ Font.register({
 });
 
 const styles = StyleSheet.create({
-  page: {
-    backgroundColor: "#E4E4E4",
-  },
+  page: {},
   body: {
     display: "flex",
     flexDirection: "column",
