@@ -431,13 +431,15 @@ const PDFGuia: React.FC<Props> = (Props) => {
                   <Text>Whatsapp: (55) 11-981983900</Text>
                 </View>
                 <View style={styles.storyInfoText}>
-                  <Text>Rua Joaquim Nabuco</Text>
-                  <Text>São Paulo (SP) - CEP: 03050-020</Text>
+                  <Text>Rua Barão de Jaguara, 901</Text>
+                  <Text>São Paulo (SP) - CEP: 01520-010</Text>
                 </View>
                 <View style={styles.storyInfoText}>
                   <Text>Facebook: facebook.com/alopapers</Text>
                   <Text>Instagram: instagram.com/alopapers</Text>
-                  <Text>E-mail: alopapers@gmail.com / alopapers.com.br</Text>
+                  <Text>
+                    E-mail: contato@alopapers.com.br / alopapers.com.br
+                  </Text>
                 </View>
               </View>
             </View>
